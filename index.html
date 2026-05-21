@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hub ✦</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── FLOWTASK DESIGN SYSTEM ── */
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --card: #1c1c1c;
+      --border: #272727;
+      --border-light: #333333;
+      --text: #efefef;
+      --text-muted: #555555;
+      --text-mid: #999999;
+      --accent: #efefef;
+      --accent-glow: rgba(239,239,239,0.10);
+      --flow: #ffffff;
+      --flow-glow: rgba(255,255,255,0.15);
+      --flow-dim: rgba(255,255,255,0.07);
+      --success: #4caf82;
+      --danger: #e05252;
+      --radius: 14px;
+      --radius-sm: 9px;
+    }
+    body[data-theme="light"] {
+      --bg: #e2e0dc;
+      --surface: #eceae6;
+      --card: #ffffff;
+      --border: #d0ceca;
+      --border-light: #c0beba;
+      --text: #141414;
+      --text-muted: #9a9892;
+      --text-mid: #4a4845;
+      --accent: #141414;
+      --accent-glow: rgba(20,20,20,0.08);
+      --flow: #141414;
+      --flow-glow: rgba(20,20,20,0.18);
+      --flow-dim: rgba(0,0,0,0.07);
+      --success: #2f8b66;
+      --danger: #c94040;
+    }
+    body[data-theme="miku"] {
+      --bg: #FFF0F7;
+      --surface: #f2fcfb;
+      --card: #ffffff;
+      --border: #99D5D0;
+      --border-light: #BCE8E4;
+      --text: #1A2B2A;
+      --text-muted: #007871;
+      --text-mid: #005D57;
+      --accent: #E3007F;
+      --accent-glow: rgba(227,0,127,0.14);
+      --flow: #00C4B6;
+      --flow-glow: rgba(0,196,182,0.30);
+      --flow-dim: rgba(0,196,182,0.15);
+      --success: #00a898;
+      --danger: #d04b4b;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+      scrollbar-width: none;
+    }
+    body::-webkit-scrollbar { display: none; }
+
+    /* ── CENTERED HERO SECTION ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 40px 80px;
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 40px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+    }
+
+    /* ── FLEX GRID CARDS ── */
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+      opacity: 0;
+      animation: fadeUp 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+    }
+
+    .card:hover {
+      background: var(--surface);
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+    }
+
+    .card-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    /* Staggered animation delays untuk kartu */
+    .card:nth-child(1)  { animation-delay: 0.1s; }
+    .card:nth-child(2)  { animation-delay: 0.15s; }
+    .card:nth-child(3)  { animation-delay: 0.2s; }
+
+    /* ── NAVBAR (bottom) ── */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 0 40px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--border-light);
+      margin: 0 4px;
+    }
+
+    .theme-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.02em;
+    }
+    .theme-btn:hover {
+      border-color: var(--border-light);
+      color: var(--text);
+    }
+    .theme-btn.active {
+      background: var(--flow-dim);
+      border-color: var(--flow);
+      color: var(--text);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      main { padding-left: 20px; padding-right: 20px; }
+      nav { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <main>
+    <h1 id="dynamic-greeting">What should we focus on?</h1>
+
+    <div class="grid" id="grid">
+      <a class="card" href="https://rojaryg.github.io/flow-task9/" target="_blank"><span class="card-name">FlowTask</span></a>
+      <a class="card" href="https://rojaryg.github.io/my-example-notes/" target="_blank"><span class="card-name">Notebook</span></a>
+      <a class="card" href="https://rojaryg.github.io/mindryg/" target="_blank"><span class="card-name">Mindmap</span></a>
+    </div>
+  </main>
+
+  <nav>
+    <span class="nav-logo">Hub ✦</span>
+    <div class="nav-divider"></div>
+    <button class="theme-btn active" onclick="setTheme('dark', this)">Dark</button>
+    <button class="theme-btn" onclick="setTheme('light', this)">Light</button>
+    <button class="theme-btn" onclick="setTheme('miku', this)">Miku</button>
+  </nav>
+
+  <script>
+    // ── FUNGSI SAPAAN ACAK ──
+    const greetings = [
+      "What should we focus on today?",
+      "Halo, Roja. Mau buka apa hari ini?",
+      "Ready to build something great?",
+      "Welcome back! Let's get into the flow.",
+      "Which project are we tackling?",
+      "Selamat datang. Let's make it a productive day."
+    ];
+
+    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    document.getElementById('dynamic-greeting').textContent = randomGreeting;
+
+    // ── FUNGSI THEME SWITCHER ──
+    function setTheme(theme, btn) {
+      document.body.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
