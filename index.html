@@ -6,7 +6,6 @@
     <title>My Life Calendar ✦</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* ── FLOWTASK DESIGN SYSTEM (SYNCED DENGAN HUB) ── */
         :root {
             --bg: #0a0a0a;
             --surface: #111111;
@@ -27,43 +26,21 @@
             --radius-sm: 9px;
             --lived: #333333;
         }
-
         body[data-theme="light"] {
-            --bg: #e2e0dc;
-            --surface: #eceae6;
-            --card: #ffffff;
-            --border: #d0ceca;
-            --border-light: #c0beba;
-            --text: #141414;
-            --text-muted: #9a9892;
-            --text-mid: #4a4845;
-            --accent: #141414;
-            --accent-glow: rgba(20,20,20,0.08);
-            --flow: #141414;
-            --flow-glow: rgba(20,20,20,0.18);
-            --flow-dim: rgba(0,0,0,0.07);
-            --success: #2f8b66;
-            --danger: #c94040;
-            --lived: #c0beba;
+            --bg: #e2e0dc; --surface: #eceae6; --card: #ffffff;
+            --border: #d0ceca; --border-light: #c0beba;
+            --text: #141414; --text-muted: #9a9892; --text-mid: #4a4845;
+            --accent: #141414; --accent-glow: rgba(20,20,20,0.08);
+            --flow: #141414; --flow-glow: rgba(20,20,20,0.18); --flow-dim: rgba(0,0,0,0.07);
+            --success: #2f8b66; --danger: #c94040; --lived: #c0beba;
         }
-
         body[data-theme="miku"] {
-            --bg: #FFF0F7;
-            --surface: #f2fcfb;
-            --card: #ffffff;
-            --border: #99D5D0;
-            --border-light: #BCE8E4;
-            --text: #1A2B2A;
-            --text-muted: #007871;
-            --text-mid: #005D57;
-            --accent: #E3007F;
-            --accent-glow: rgba(227,0,127,0.14);
-            --flow: #00C4B6;
-            --flow-glow: rgba(0,196,182,0.30);
-            --flow-dim: rgba(0,196,182,0.15);
-            --success: #00a898;
-            --danger: #d04b4b;
-            --lived: #BCE8E4;
+            --bg: #FFF0F7; --surface: #f2fcfb; --card: #ffffff;
+            --border: #99D5D0; --border-light: #BCE8E4;
+            --text: #1A2B2A; --text-muted: #007871; --text-mid: #005D57;
+            --accent: #E3007F; --accent-glow: rgba(227,0,127,0.14);
+            --flow: #00C4B6; --flow-glow: rgba(0,196,182,0.30); --flow-dim: rgba(0,196,182,0.15);
+            --success: #00a898; --danger: #d04b4b; --lived: #BCE8E4;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -74,123 +51,47 @@
             color: var(--text);
             height: 100vh;
             display: flex;
+            flex-direction: column;
             overflow: hidden;
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* --- SIDEBAR --- */
-        #sidebar {
-            width: 280px;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 24px 16px;
-            gap: 24px;
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        .logo h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 4px;
-        }
-        
-        .logo h1 span { font-weight: 300; }
-        .logo p { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
-
-        .section-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            display: block;
-            font-weight: 500;
-        }
-
-        .control-group { margin-bottom: 20px; }
-
-        input, select {
-            width: 100%;
-            padding: 10px 12px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            outline: none;
-            transition: border-color 0.2s, background 0.3s ease;
-        }
-        input:focus { border-color: var(--accent); }
-
-        .filter-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .filter-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-        .filter-item:hover { background: var(--card); }
-        .filter-item input { width: auto; }
-
-        .sidebar-footer { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
-
-        /* --- MAIN CONTENT --- */
-        #main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--bg);
-            overflow: hidden;
-            transition: background 0.3s ease;
-        }
-
+        /* ── HEADER ── */
         .main-header {
-            padding: 24px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            transition: border-color 0.3s ease;
+            padding: 36px 40px 16px;
+            text-align: center;
+            flex-shrink: 0;
         }
-        
-        .main-header h2 { 
-            font-family: 'Space Grotesk', sans-serif; 
-            font-size: 1.8rem; 
-            font-weight: 500; 
-            letter-spacing: -0.02em;
+        .main-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 10px;
         }
+        #header-stats {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 0.01em;
+        }
+        #header-stats span { color: var(--text); font-weight: 500; }
 
+        /* ── CALENDAR ── */
         .calendar-container {
             flex: 1;
-            padding: 40px;
+            padding: 24px 40px 80px;
             overflow: auto;
             display: flex;
             justify-content: center;
         }
-
         .grid-scroll-wrapper { position: relative; }
-
         .grid {
             display: grid;
             grid-template-columns: 40px repeat(52, 13px);
             gap: 4px;
         }
-
         .axis-label {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 0.65rem;
@@ -200,236 +101,276 @@
             justify-content: center;
         }
         .y-label { justify-content: flex-end; padding-right: 8px; }
-
         .week-box {
-            width: 13px;
-            height: 13px;
+            width: 13px; height: 13px;
             border: 1px solid var(--border);
             border-radius: 2px;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: crosshair;
         }
-        .week-box:hover {
-            transform: scale(1.5);
-            z-index: 10;
-            border-color: var(--text);
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
+        .week-box:hover { transform: scale(1.5); z-index: 10; border-color: var(--text); box-shadow: 0 0 15px rgba(0,0,0,0.2); }
         .week-box.lived { background-color: var(--lived); border-color: var(--lived); }
         .week-box.current { border: 2px solid var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+        .marker { width: 5px; height: 5px; background: var(--bg); border-radius: 50%; margin: 3px auto; }
 
-        .marker {
-            width: 5px;
-            height: 5px;
-            background: var(--bg);
-            border-radius: 50%;
-            margin: 3px auto;
-        }
-
-        /* --- BOTTOM PANEL --- */
-        #bottom-panel {
+        /* ── BOTTOM BAR ── */
+        #bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0; right: 0;
             background: var(--surface);
             border-top: 1px solid var(--border);
-            padding: 24px 40px;
+            padding: 10px 24px;
             display: flex;
-            gap: 40px;
-            height: 240px;
-            box-sizing: border-box;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            z-index: 1000;
+            white-space: nowrap;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-
-        .bottom-column {
-            display: flex;
-            flex-direction: column;
+        .bar-logo {
+            padding: 6px 14px 6px 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: -0.01em;
+            cursor: default;
         }
-        
-        .bottom-column.form-side {
-            width: 380px;
+        .bar-sep {
+            width: 1px;
+            height: 18px;
+            background: var(--border-light);
+            margin: 0 2px;
             flex-shrink: 0;
         }
-
-        .bottom-column.list-side {
-            flex: 1;
+        .bar-btn {
+            padding: 6px 14px;
+            border-radius: 100px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-mid);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            letter-spacing: 0.01em;
+        }
+        .bar-btn:hover { background: var(--card); color: var(--text); }
+        .bar-btn.active {
+            border-color: var(--border-light);
+            color: var(--text);
+            background: var(--card);
         }
 
-        .bottom-divider {
-            width: 1px;
-            background: var(--border);
-            align-self: stretch;
-            transition: background 0.3s ease;
+        /* ── BACKDROP ── */
+        #backdrop {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 998;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.2s;
         }
+        #backdrop.open { opacity: 1; pointer-events: all; }
+
+        /* ── SLIDE-UP PANELS ── */
+        .slide-panel {
+            position: fixed;
+            bottom: 56px;
+            left: 50%;
+            transform: translateX(-50%) translateY(12px);
+            width: min(720px, calc(100vw - 32px));
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            box-shadow: 0 -8px 48px rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.2s, transform 0.25s cubic-bezier(0.4,0,0.2,1),
+                        background 0.3s ease, border-color 0.3s ease;
+            overflow: hidden;
+        }
+        .slide-panel.open {
+            opacity: 1; pointer-events: all;
+            transform: translateX(-50%) translateY(0);
+        }
+        .panel-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+        .panel-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem; font-weight: 500;
+            color: var(--text-mid);
+            letter-spacing: 0.03em; text-transform: uppercase;
+        }
+        .panel-close {
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; font-size: 1rem; padding: 2px 6px;
+            border-radius: 6px; transition: color 0.15s, background 0.15s;
+        }
+        .panel-close:hover { color: var(--text); background: var(--card); }
+        .panel-body { padding: 20px; }
+
+        /* ── PANEL: SETUP ── */
+        .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .section-label {
+            font-size: 0.65rem; text-transform: uppercase;
+            letter-spacing: 0.12em; color: var(--text-muted);
+            margin-bottom: 8px; display: block; font-weight: 500;
+        }
+        input, select {
+            width: 100%; padding: 10px 12px;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); color: var(--text);
+            font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            outline: none; transition: border-color 0.2s, background 0.3s ease;
+        }
+        input:focus, select:focus { border-color: var(--accent); }
+        .filter-list { display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto; }
+        .filter-item {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.85rem; cursor: pointer; padding: 6px 8px;
+            border-radius: 6px; transition: background 0.2s;
+        }
+        .filter-item:hover { background: var(--card); }
+        .filter-item input { width: auto; }
+
+        /* ── PANEL: TAMBAH ── */
+        .tambah-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .tambah-left { display: flex; flex-direction: column; gap: 10px; }
+        .tambah-right { display: flex; flex-direction: column; }
 
         .btn-primary {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 10px 16px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            cursor: pointer;
-            width: 100%;
+            background: var(--accent); color: var(--bg); border: none;
+            padding: 10px 16px; border-radius: var(--radius-sm);
+            font-weight: 600; font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            cursor: pointer; width: 100%;
             transition: transform 0.1s, background 0.3s ease, color 0.3s ease;
         }
         .btn-primary:active { transform: scale(0.98); }
-        
         .btn-secondary {
-            background: var(--card);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 10px 16px;
-            border-radius: var(--radius-sm);
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            font-size: 0.85rem;
-            width: 100%;
+            background: var(--card); color: var(--text);
+            border: 1px solid var(--border); padding: 10px 16px;
+            border-radius: var(--radius-sm); font-family: 'Inter', sans-serif;
+            cursor: pointer; font-size: 0.85rem;
             transition: background 0.2s, border-color 0.2s, color 0.3s ease;
         }
-        .btn-secondary:hover {
-            border-color: var(--border-light);
-        }
+        .btn-secondary:hover { border-color: var(--border-light); }
 
         .data-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
+            background: var(--card); border: 1px solid var(--border);
+            padding: 10px 12px; border-radius: var(--radius-sm);
+            margin-bottom: 8px; display: flex; justify-content: space-between;
+            align-items: center; font-size: 0.85rem;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
         .data-item .actions { display: flex; gap: 8px; }
         .data-item button { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
         .data-item button:hover { color: var(--text); }
+        #dataList { flex: 1; overflow-y: auto; max-height: 180px; padding-right: 2px; }
 
-        #dataList {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        /* --- THEME PICKER --- */
-        .theme-picker {
-            display: flex;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 4px;
-            gap: 4px;
-        }
-        .tpick {
-            flex: 1;
-            border: 1px solid transparent;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 500;
-            padding: 6px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tpick:hover { color: var(--text); }
-        .tpick.active { 
-            background: var(--flow-dim); 
-            border-color: var(--flow);
-            color: var(--text); 
-        }
-
-        /* --- TOOLTIP --- */
+        /* ── TOOLTIP ── */
         #tooltip {
-            position: fixed;
-            background: var(--surface);
-            border: 1px solid var(--border-light);
-            color: var(--text);
-            padding: 12px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 0.8rem;
-            pointer-events: none;
-            opacity: 0;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: fixed; background: var(--surface);
+            border: 1px solid var(--border-light); color: var(--text);
+            padding: 12px 16px; border-radius: var(--radius-sm);
+            font-size: 0.8rem; pointer-events: none; opacity: 0;
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             transition: opacity 0.2s;
         }
     </style>
 </head>
 <body data-theme="dark">
 
-<aside id="sidebar">
-    <div class="logo">
-        <h1>Life<span>Calendar</span> ✦</h1>
-        <p>A Visual 90-Year Journey</p>
-    </div>
-
-    <div class="control-group">
-        <label class="section-label">Identity</label>
-        <input type="date" id="dobInput">
-    </div>
-
-    <div class="control-group">
-        <label class="section-label">Tampilan / Filters</label>
-        <div id="filterList" class="filter-list"></div>
-    </div>
-
-    <div class="sidebar-footer">
-        <button class="btn-secondary" onclick="toggleFullscreen()">Toggle Fullscreen</button>
-        <div class="theme-picker">
-            <button class="tpick active" data-theme="dark" onclick="setTheme('dark')">Dark</button>
-            <button class="tpick" data-theme="light" onclick="setTheme('light')">Light</button>
-            <button class="tpick" data-theme="miku" onclick="setTheme('miku')">Miku</button>
-        </div>
-    </div>
-</aside>
-
-<main id="main">
+    <!-- Header -->
     <header class="main-header">
         <h2 id="header-weeks">4,680 Weeks</h2>
-        <div id="header-stats" style="font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; color: var(--text-muted);">
-            Lived: <span id="stat-lived" style="color: var(--text); font-weight: 500;">0</span> | Remaining: <span id="stat-rem">0</span>
+        <div id="header-stats">
+            Progres: <span id="stat-lived">0</span> &bull; Sisa Minggu: <span id="stat-rem">0</span>
         </div>
     </header>
 
+    <!-- Calendar -->
     <div class="calendar-container">
         <div class="grid-scroll-wrapper">
             <div class="grid" id="calendarGrid"></div>
         </div>
     </div>
 
-    <div id="bottom-panel">
-        <div class="bottom-column form-side">
-            <label class="section-label" id="form-title">Tambah Fase Kehidupan</label>
-            <div class="control-group" style="margin-bottom: 0;">
-                <input type="text" id="phaseName" placeholder="Contoh: Masa Kecil, Karir...">
-                <div style="display: grid; grid-template-columns: 1fr 1fr 60px; gap: 10px; margin-top: 10px;">
-                    <input type="number" id="phaseStart" placeholder="Umur Mulai">
-                    <input type="number" id="phaseEnd" placeholder="Umur Selesai">
-                    <input type="color" id="phaseColor" value="#efefef" style="height: 38px; padding: 2px;">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 10px;">
-                    <button class="btn-primary" id="btnSubmitPhase" onclick="submitPhase()">Simpan Fase</button>
-                    <button id="btnCancelEdit" class="btn-secondary" style="display: none;" onclick="cancelEdit()">Batal</button>
-                </div>
-            </div>
+    <!-- Backdrop -->
+    <div id="backdrop" onclick="closeAllPanels()"></div>
+
+    <!-- Panel: Setup -->
+    <div class="slide-panel" id="setupPanel">
+        <div class="panel-header">
+            <span class="panel-title">Setup</span>
+            <button class="panel-close" onclick="closeAllPanels()">✕</button>
         </div>
-
-        <div class="bottom-divider"></div>
-
-        <div class="bottom-column list-side">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <label class="section-label" style="margin-bottom: 0;">Events & Phases Tersimpan</label>
-                <button class="btn-secondary" style="width: auto; padding: 4px 12px; font-size: 0.75rem;" onclick="addEventMode()">+ Tambah Event Spesifik</button>
+        <div class="panel-body">
+            <div class="setup-grid">
+                <div>
+                    <label class="section-label">Tanggal Lahir</label>
+                    <input type="date" id="dobInput">
+                </div>
+                <div>
+                    <label class="section-label">Tampilkan / Sembunyikan</label>
+                    <div id="filterList" class="filter-list"></div>
+                </div>
             </div>
-            <div id="dataList"></div>
         </div>
     </div>
-</main>
 
-<div id="tooltip"></div>
+    <!-- Panel: Tambah -->
+    <div class="slide-panel" id="tambahPanel">
+        <div class="panel-header">
+            <span class="panel-title" id="panel-tambah-title">Tambah Fase / Event</span>
+            <button class="panel-close" onclick="closeAllPanels()">✕</button>
+        </div>
+        <div class="panel-body">
+            <div class="tambah-grid">
+                <div class="tambah-left">
+                    <select id="modeSelect" onchange="onModeChange(this.value)">
+                        <option value="phase">✦ Fase Kehidupan</option>
+                        <option value="event">📍 Event Spesifik</option>
+                    </select>
+                    <input type="text" id="phaseName" placeholder="Contoh: Masa Kecil, Karir...">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 52px; gap: 8px;">
+                        <input type="number" id="phaseStart" placeholder="Umur Mulai">
+                        <input type="number" id="phaseEnd" placeholder="Umur Selesai">
+                        <input type="color" id="phaseColor" value="#efefef" style="height: 42px; padding: 3px;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px;">
+                        <button class="btn-primary" id="btnSubmitPhase" onclick="submitPhase()">Simpan Fase</button>
+                        <button id="btnCancelEdit" class="btn-secondary" style="display: none; width: auto; padding: 10px 16px;" onclick="cancelEdit()">Batal</button>
+                    </div>
+                </div>
+                <div class="tambah-right">
+                    <label class="section-label">Tersimpan</label>
+                    <div id="dataList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div id="bottom-bar">
+        <span class="bar-logo">Life Calendar ✦</span>
+        <div class="bar-sep"></div>
+        <button class="bar-btn" id="btn-setup" onclick="togglePanel('setupPanel', 'btn-setup')">Setup</button>
+        <button class="bar-btn" id="btn-tambah" onclick="togglePanel('tambahPanel', 'btn-tambah')">Tambah</button>
+        <div class="bar-sep"></div>
+        <button class="bar-btn" onclick="toggleFullscreen()">Fullscreen</button>
+        <div class="bar-sep"></div>
+        <button class="bar-btn tpick" data-theme="dark" onclick="setTheme('dark')">Dark</button>
+        <button class="bar-btn tpick" data-theme="light" onclick="setTheme('light')">Light</button>
+        <button class="bar-btn tpick" data-theme="miku" onclick="setTheme('miku')">Miku</button>
+    </div>
+
+    <div id="tooltip"></div>
 
 <script>
     // --- STATE ---
@@ -444,17 +385,19 @@
     let appData = JSON.parse(localStorage.getItem('myLifeCalendar_v2')) || defaultData;
     let hiddenIds = new Set();
     let editId = null;
-    let currentMode = 'phase'; // 'phase' or 'event'
+    let currentMode = 'phase';
+    let activePanel = null;
+    let activeBtnId = null;
 
     // --- INIT ---
     function init() {
         document.getElementById('dobInput').value = appData.dob;
         document.getElementById('dobInput').onchange = (e) => {
             appData.dob = e.target.value;
-            save();
-            render();
+            save(); render();
         };
         setTheme(appData.theme || 'dark');
+        document.addEventListener('mousemove', updateTooltipPos);
         render();
     }
 
@@ -470,55 +413,44 @@
         const grid = document.getElementById('calendarGrid');
         grid.innerHTML = '';
         const stats = getStats();
-        
         document.getElementById('stat-lived').innerText = stats.lived.toLocaleString();
         document.getElementById('stat-rem').innerText = stats.rem.toLocaleString();
 
-        // X-Axis Labels
         grid.appendChild(createDiv('axis-label', ''));
-        for (let w = 1; w <= 52; w++) {
+        for (let w = 1; w <= 52; w++)
             grid.appendChild(createDiv('axis-label', w % 5 === 0 || w === 1 ? w : ''));
-        }
 
         let currentTotalWeek = 1;
         for (let y = 0; y < 90; y++) {
             grid.appendChild(createDiv('axis-label y-label', y % 10 === 0 ? y : ''));
-
             for (let w = 1; w <= 52; w++) {
                 const box = document.createElement('div');
                 box.className = 'week-box';
-                
                 const isLived = currentTotalWeek <= stats.lived;
                 const isCurrent = currentTotalWeek === stats.lived;
-
                 if (isLived) box.classList.add('lived');
                 if (isCurrent) box.classList.add('current');
 
-                // Check for Items (Phases / Events)
                 let bgColor = '';
                 let tooltipContent = `Umur ${y}, Minggu ${w}`;
 
-                const activePhase = appData.items.find(i => 
-                    i.type === 'phase' && y >= i.start && y <= i.end && !hiddenIds.has(i.id)
-                );
+                const activePhase = appData.items.find(i =>
+                    i.type === 'phase' && y >= i.start && y <= i.end && !hiddenIds.has(i.id));
                 if (activePhase) {
                     bgColor = activePhase.color;
                     tooltipContent += `<br><span style="color:${bgColor}">✦ ${activePhase.name}</span>`;
                 }
 
-                const activeEvent = appData.items.find(i => 
-                    i.type === 'event' && i.age == y && i.week == w && !hiddenIds.has(i.id)
-                );
+                const activeEvent = appData.items.find(i =>
+                    i.type === 'event' && i.age == y && i.week == w && !hiddenIds.has(i.id));
                 if (activeEvent) {
                     box.innerHTML = '<div class="marker"></div>';
                     tooltipContent += `<br>📍 <b>${activeEvent.name}</b>`;
                 }
 
                 if (bgColor) box.style.backgroundColor = bgColor;
-
                 box.onmouseenter = (e) => showTooltip(e, tooltipContent);
                 box.onmouseleave = hideTooltip;
-
                 grid.appendChild(box);
                 currentTotalWeek++;
             }
@@ -529,54 +461,57 @@
 
     function createDiv(cls, txt) {
         const d = document.createElement('div');
-        d.className = cls;
-        d.innerText = txt;
-        return d;
+        d.className = cls; d.innerText = txt; return d;
     }
 
-    // --- UI INTERACTIONS ---
-    function showTooltip(e, content) {
-        const tip = document.getElementById('tooltip');
-        tip.innerHTML = content;
-        tip.style.opacity = '1';
-        updateTooltipPos(e);
+    // --- PANELS ---
+    function togglePanel(panelId, btnId) {
+        const isSame = activePanel === panelId;
+        closeAllPanels();
+        if (!isSame) {
+            document.getElementById(panelId).classList.add('open');
+            document.getElementById('backdrop').classList.add('open');
+            if (btnId) document.getElementById(btnId).classList.add('active');
+            activePanel = panelId;
+            activeBtnId = btnId;
+        }
     }
 
-    function updateTooltipPos(e) {
-        const tip = document.getElementById('tooltip');
-        let x = e.clientX + 15;
-        let y = e.clientY - 40;
-
-        if (x + tip.offsetWidth > window.innerWidth) x = e.clientX - tip.offsetWidth - 15;
-        tip.style.left = x + 'px';
-        tip.style.top = y + 'px';
+    function closeAllPanels() {
+        document.querySelectorAll('.slide-panel').forEach(p => p.classList.remove('open'));
+        document.getElementById('backdrop').classList.remove('open');
+        document.querySelectorAll('.bar-btn').forEach(b => b.classList.remove('active'));
+        activePanel = null; activeBtnId = null;
     }
 
-    function setTheme(t) {
-        document.body.setAttribute('data-theme', t);
-        appData.theme = t;
-        save();
-        document.querySelectorAll('.tpick').forEach(b => {
-            b.classList.toggle('active', b.getAttribute('data-theme') === t);
-        });
+    // --- FORM LOGIC ---
+    function onModeChange(val) {
+        if (val === 'event') addEventMode();
+        else addPhaseMode();
     }
 
     function addEventMode() {
         currentMode = 'event';
-        document.getElementById('form-title').innerText = "Tambah Event Spesifik";
+        document.getElementById('modeSelect').value = 'event';
         document.getElementById('phaseStart').placeholder = "Umur";
         document.getElementById('phaseEnd').placeholder = "Minggu ke-";
         document.getElementById('btnSubmitPhase').innerText = "Simpan Event";
     }
 
+    function addPhaseMode() {
+        currentMode = 'phase';
+        document.getElementById('modeSelect').value = 'phase';
+        document.getElementById('phaseStart').placeholder = "Umur Mulai";
+        document.getElementById('phaseEnd').placeholder = "Umur Selesai";
+        document.getElementById('btnSubmitPhase').innerText = "Simpan Fase";
+    }
+
     function cancelEdit() {
         editId = null;
-        currentMode = 'phase';
-        document.getElementById('form-title').innerText = "Tambah Fase Kehidupan";
+        addPhaseMode();
         document.getElementById('phaseName').value = '';
         document.getElementById('phaseStart').value = '';
         document.getElementById('phaseEnd').value = '';
-        document.getElementById('btnSubmitPhase').innerText = "Simpan Fase";
         document.getElementById('btnCancelEdit').style.display = 'none';
     }
 
@@ -585,47 +520,30 @@
         const val1 = parseInt(document.getElementById('phaseStart').value);
         const val2 = parseInt(document.getElementById('phaseEnd').value);
         const color = document.getElementById('phaseColor').value;
-
         if (!name || isNaN(val1)) return;
 
-        const newItem = {
-            id: editId || Date.now(),
-            type: currentMode,
-            name,
-            color
-        };
-
-        if (currentMode === 'phase') {
-            newItem.start = val1;
-            newItem.end = val2;
-        } else {
-            newItem.age = val1;
-            newItem.week = val2;
-        }
+        const newItem = { id: editId || Date.now(), type: currentMode, name, color };
+        if (currentMode === 'phase') { newItem.start = val1; newItem.end = val2; }
+        else { newItem.age = val1; newItem.week = val2; }
 
         if (editId) {
             const idx = appData.items.findIndex(i => i.id === editId);
             appData.items[idx] = newItem;
-        } else {
-            appData.items.push(newItem);
-        }
+        } else { appData.items.push(newItem); }
 
-        save();
-        cancelEdit();
-        render();
+        save(); cancelEdit(); render();
     }
 
     function editItem(id) {
         const item = appData.items.find(i => i.id === id);
-        editId = id;
-        currentMode = item.type;
-        
+        editId = id; currentMode = item.type;
         document.getElementById('phaseName').value = item.name;
         document.getElementById('phaseColor').value = item.color;
-        document.getElementById('btnCancelEdit').style.display = 'block';
+        document.getElementById('btnCancelEdit').style.display = 'inline-block';
+        document.getElementById('btnSubmitPhase').innerText = "Update Data";
 
         if (item.type === 'phase') {
-            addPhaseMode(); 
+            addPhaseMode();
             document.getElementById('phaseStart').value = item.start;
             document.getElementById('phaseEnd').value = item.end;
         } else {
@@ -634,24 +552,17 @@
             document.getElementById('phaseEnd').value = item.week;
         }
         document.getElementById('btnSubmitPhase').innerText = "Update Data";
-    }
-
-    function addPhaseMode() {
-        currentMode = 'phase';
-        document.getElementById('form-title').innerText = "Tambah Fase Kehidupan";
-        document.getElementById('phaseStart').placeholder = "Umur Mulai";
-        document.getElementById('phaseEnd').placeholder = "Umur Selesai";
+        // Open tambah panel if not open
+        if (activePanel !== 'tambahPanel') togglePanel('tambahPanel', 'btn-tambah');
     }
 
     function deleteItem(id) {
         appData.items = appData.items.filter(i => i.id !== id);
-        save();
-        render();
+        save(); render();
     }
 
     function toggleFilter(id) {
-        if (hiddenIds.has(id)) hiddenIds.delete(id);
-        else hiddenIds.add(id);
+        if (hiddenIds.has(id)) hiddenIds.delete(id); else hiddenIds.add(id);
         render();
     }
 
@@ -666,8 +577,7 @@
                 <div class="actions">
                     <button onclick="editItem(${item.id})">✎</button>
                     <button onclick="deleteItem(${item.id})">✕</button>
-                </div>
-            `;
+                </div>`;
             list.appendChild(el);
         });
     }
@@ -679,16 +589,36 @@
             const label = document.createElement('label');
             label.className = 'filter-item';
             const checked = hiddenIds.has(item.id) ? '' : 'checked';
-            label.innerHTML = `
-                <input type="checkbox" ${checked} onchange="toggleFilter(${item.id})">
-                <span>${item.name}</span>
-            `;
+            label.innerHTML = `<input type="checkbox" ${checked} onchange="toggleFilter(${item.id})"><span>${item.name}</span>`;
             list.appendChild(label);
         });
     }
 
+    // --- UI HELPERS ---
+    function showTooltip(e, content) {
+        const tip = document.getElementById('tooltip');
+        tip.innerHTML = content; tip.style.opacity = '1';
+        updateTooltipPos(e);
+    }
+    function updateTooltipPos(e) {
+        const tip = document.getElementById('tooltip');
+        if (tip.style.opacity === '0') return;
+        let x = e.clientX + 15, y = e.clientY - 40;
+        if (x + tip.offsetWidth > window.innerWidth) x = e.clientX - tip.offsetWidth - 15;
+        tip.style.left = x + 'px'; tip.style.top = y + 'px';
+    }
     function hideTooltip() { document.getElementById('tooltip').style.opacity = '0'; }
+
+    function setTheme(t) {
+        document.body.setAttribute('data-theme', t);
+        appData.theme = t; save();
+        document.querySelectorAll('.tpick').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-theme') === t);
+        });
+    }
+
     function save() { localStorage.setItem('myLifeCalendar_v2', JSON.stringify(appData)); }
+
     function toggleFullscreen() {
         if (!document.fullscreenElement) document.documentElement.requestFullscreen();
         else document.exitFullscreen();
@@ -696,6 +626,5 @@
 
     init();
 </script>
-
 </body>
 </html>
