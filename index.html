@@ -22,7 +22,7 @@
             --radius-sm: 9px;
             
             /* Sidebar Variables */
-            --sidebar-collapsed: 64px;
+            --sidebar-collapsed: 48px;
             --sidebar-expanded: 280px; /* Diperlebar sedikit agar form muat rapi */
         }
         body[data-theme="light"] {
@@ -59,9 +59,10 @@
         body.sidebar-open #left-sidebar { width: var(--sidebar-expanded); }
 
         .sidebar-header {
-            display: flex; align-items: center; height: 64px; padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-            transition: border-color 0.3s;
+            display: flex; align-items: center; height: 52px; padding: 0 8px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+            transition: border-color 0.3s, padding 0.3s;
         }
+        body.sidebar-open .sidebar-header { padding: 0 16px; }
         .sidebar-toggle {
             background: transparent; border: none; color: var(--text-muted); cursor: pointer;
             width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
@@ -141,12 +142,12 @@
         .event-checkbox-input:checked + .event-checkbox-box svg { opacity: 1; transform: scale(1); }
         
         .event-label { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); transition: opacity 0.2s; }
-        .event-checkbox-input:not(:checked) ~ .event-label { opacity: 0.5; text-decoration: line-through; }
+        .event-checkbox-input:not(:checked) ~ .event-label { opacity: 0.4; }
 
         .event-text { display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
         .event-time-label { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; transition: opacity 0.2s; }
-        .event-checkbox-input:not(:checked) ~ .event-text .event-label { opacity: 0.5; text-decoration: line-through; }
-        .event-checkbox-input:not(:checked) ~ .event-text .event-time-label { opacity: 0.35; }
+        .event-checkbox-input:not(:checked) ~ .event-text .event-label { opacity: 0.4; }
+        .event-checkbox-input:not(:checked) ~ .event-text .event-time-label { opacity: 0.25; }
 
         .dot-btn {
             background: transparent; border: none; color: var(--text-muted); cursor: pointer;
@@ -156,18 +157,46 @@
         .list-item:hover .dot-btn { opacity: 1; }
         .dot-btn:hover { color: var(--text); background: var(--border-light); }
 
-        /* ── BOTTOM SETTINGS BUTTON ── */
-        .sidebar-bottom { padding: 12px 16px 24px; flex-shrink: 0; }
-        .sidebar-item {
-            display: flex; align-items: center; padding: 10px 0; color: var(--text-muted); cursor: pointer;
-            border: none; background: transparent; width: 100%; text-align: left; transition: color 0.2s;
-            font-family: 'Inter', sans-serif; font-size: 0.85rem; outline: none; border-radius: 8px; justify-content: center;
+        /* ── MOVE UP/DOWN ARROWS ── */
+        .move-btns {
+            display: flex; flex-direction: column; gap: 1px; margin-right: 2px; flex-shrink: 0;
         }
-        body.sidebar-open .sidebar-item { padding: 10px 16px; justify-content: flex-start; }
+        .move-btn {
+            background: transparent; border: none; color: var(--text-muted); cursor: pointer;
+            padding: 1px 3px; border-radius: 3px; display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: color 0.15s, background 0.15s, opacity 0.2s; line-height: 1;
+        }
+        .list-item:hover .move-btn { opacity: 0.6; }
+        .move-btn:hover { color: var(--text); background: var(--border-light); opacity: 1 !important; }
+        .move-btn svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* ── DRAG AND DROP ── */
+        .list-item[draggable="true"] { cursor: grab; }
+        .list-item[draggable="true"]:active { cursor: grabbing; }
+        .list-item.drag-over-top { border-top: 2px solid var(--accent); margin-top: -2px; }
+        .list-item.drag-over-bottom { border-bottom: 2px solid var(--accent); }
+        .list-item.dragging { opacity: 0.35; }
+
+        /* ── BOTTOM SETTINGS BUTTON ── */
+        .sidebar-bottom { padding: 8px 8px 20px; flex-shrink: 0; display: none; }
+        body.sidebar-open .sidebar-bottom { display: block; padding: 8px 12px 20px; }
+        .sidebar-bottom-row { display: grid; grid-template-columns: 1fr auto; gap: 4px; }
+        .sidebar-item {
+            display: flex; align-items: center; padding: 9px 12px; color: var(--text-muted); cursor: pointer;
+            border: none; background: transparent; width: 100%; text-align: left;
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; outline: none; border-radius: 8px; justify-content: flex-start;
+        }
         .sidebar-item:hover { color: var(--text); background: var(--card); }
-        .sidebar-item svg.icon-main { width: 22px; height: 22px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-        .sidebar-label { margin-left: 12px; opacity: 0; transition: opacity 0.2s; pointer-events: none; font-weight: 500; display: flex; justify-content: space-between; width: 100%; align-items: center; }
-        body.sidebar-open .sidebar-label { opacity: 1; }
+        .sidebar-item svg.icon-main { width: 18px; height: 18px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+        .sidebar-label { margin-left: 10px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; align-items: center; white-space: nowrap; }
+        .sidebar-icon-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 38px; height: 38px; border-radius: 8px; border: none;
+            background: transparent; color: var(--text-muted); cursor: pointer;
+            transition: background 0.2s, color 0.2s; flex-shrink: 0;
+        }
+        .sidebar-icon-btn:hover { background: var(--card); color: var(--text); }
+        .sidebar-icon-btn svg { width: 17px; height: 17px; fill: currentColor; }
 
         /* ── MAIN CONTENT AREA ── */
         #main-content { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; min-width: 0; }
@@ -191,31 +220,50 @@
 
         /* ── CALENDAR ── */
         .calendar-container { flex: 1; padding: 24px 40px 40px; overflow: auto; display: flex; justify-content: center; }
+        .grid-scroll-wrapper { position: relative; padding-bottom: 120px; margin-left: -24px; transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        body.sidebar-open .grid-scroll-wrapper { margin-left: 0; }
         .grid-scroll-wrapper { position: relative; padding-bottom: 120px; }
-        .grid { display: grid; grid-template-columns: 56px repeat(52, 13px); gap: 4px; }
+        .grid { display: grid; grid-template-columns: 56px repeat(52, 13px) 28px; gap: 4px; }
         .axis-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.65rem; color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
         .y-label { justify-content: flex-end; padding-right: 6px; gap: 0; }
         .y-label-inner { display: flex; align-items: center; gap: 0; width: 100%; justify-content: flex-end; }
         .y-year { font-size: 0.58rem; color: var(--text-mid); flex-shrink: 0; letter-spacing: -0.01em; transition: color 0.3s; }
         .y-dash { flex: 1; height: 1px; border-top: 1px dashed var(--border-light); margin: 0 3px 0 4px; opacity: 0.6; }
+        .y-age-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.55rem; color: var(--text-muted); display: flex; align-items: center; padding-left: 5px; letter-spacing: -0.02em; transition: color 0.3s; user-select: none; }
         .week-box { width: 13px; height: 13px; border: 1px solid var(--border); border-radius: 2px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: crosshair; }
         .week-box:hover { transform: scale(1.5); z-index: 10; border-color: var(--text); box-shadow: 0 0 15px rgba(0,0,0,0.2); }
         .week-box.lived { background-color: var(--lived); border-color: var(--lived); }
         .week-box.current { border: 2px solid var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
         .marker { width: 5px; height: 5px; background: var(--bg); border-radius: 50%; margin: 3px auto; }
 
-        /* ── SETTINGS POPOVER (DROPDOWN) ── */
-        #settings-popover {
-            position: fixed; bottom: 24px; left: calc(var(--sidebar-collapsed) + 12px);
-            background: var(--card); border: 1px solid var(--border-light); border-radius: 12px;
-            padding: 16px 20px; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            z-index: 1001; opacity: 0; pointer-events: none; transform: translateY(10px);
-            transition: opacity 0.2s, transform 0.2s, left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* ── SETTINGS PANEL (INLINE IN SIDEBAR) ── */
+        #settings-panel {
+            flex: 1; display: none; flex-direction: column; overflow-y: auto;
         }
-        body.sidebar-open #settings-popover { left: calc(var(--sidebar-expanded) + 12px); }
-        #settings-popover.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+        body.settings-open #left-sidebar { width: var(--sidebar-expanded); }
+        body.settings-open .sidebar-content-scroll { display: none !important; }
+        body.settings-open #settings-panel { display: flex; }
 
-        .popover-section-label { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text-muted); font-weight: 600; margin-bottom: 12px; text-transform: uppercase; }
+        .settings-panel-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 16px 10px; border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .settings-back-btn {
+            background: transparent; border: none; color: var(--text-muted); cursor: pointer;
+            width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: background 0.2s, color 0.2s;
+        }
+        .settings-back-btn:hover { background: var(--card); color: var(--text); }
+        .settings-back-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .settings-panel-title { font-size: 0.80rem; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .settings-section {
+            padding: 16px 16px 0; display: flex; flex-direction: column; gap: 10px;
+            border-bottom: 1px solid var(--border); padding-bottom: 16px;
+        }
+        .settings-section:last-child { border-bottom: none; }
+        .settings-section-label { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
         
         .theme-switcher { display: flex; gap: 6px; }
         .theme-btn {
@@ -253,6 +301,45 @@
 
         /* ── TOOLTIP ── */
         #tooltip { position: fixed; background: var(--surface); border: 1px solid var(--border-light); color: var(--text); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.8rem; pointer-events: none; opacity: 0; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: opacity 0.2s; line-height: 1.4; }
+
+        /* ── ARRANGE DROPDOWN ── */
+        .arrange-menu {
+            position: fixed; background: var(--card); border: 1px solid var(--border-light);
+            border-radius: 8px; padding: 4px; z-index: 3000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35); display: none; min-width: 130px;
+        }
+        .arrange-menu.open { display: block; }
+        .arrange-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 7px 10px; border-radius: 5px;
+            font-size: 0.82rem; cursor: pointer; color: var(--text); transition: background 0.15s;
+            background: transparent; border: none; width: 100%; text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+        .arrange-item:hover { background: var(--surface); }
+        .arrange-item-left { display: flex; align-items: center; gap: 8px; }
+        .arrange-item-left svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .arrange-item.has-active .arrange-item-left { color: var(--accent); }
+        .arrange-chevron { width: 10px; height: 10px; stroke: var(--text-muted); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .arrange-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+        .arrange-submenu {
+            position: fixed; background: var(--card); border: 1px solid var(--border-light);
+            border-radius: 8px; padding: 4px; z-index: 3001;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35); display: none; min-width: 160px;
+        }
+        .arrange-submenu.open { display: block; }
+        .arrange-subitem {
+            display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 5px;
+            font-size: 0.82rem; cursor: pointer; color: var(--text); transition: background 0.15s;
+            background: transparent; border: none; width: 100%; text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+        .arrange-subitem:hover { background: var(--surface); }
+        .arrange-subitem.active { color: var(--accent); font-weight: 600; }
+        .arrange-subitem .check-icon { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; opacity: 0; margin-left: auto; }
+        .arrange-subitem.active .check-icon { opacity: 1; }
+        .submenu-label { font-size: 0.62rem; color: var(--text-muted); padding: 6px 10px 3px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
     </style>
 </head>
 <body data-theme="dark">
@@ -288,12 +375,15 @@
                         <input type="text" id="phaseName" class="sidebar-input" placeholder="e.g., Childhood, Career...">
                     </div>
 
-                    <!-- Phase mode: start/end age -->
-                    <div class="form-field" id="field-ages">
-                        <span class="form-label">Start Age / End Age</span>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <input type="number" id="phaseStart" class="sidebar-input" placeholder="Start Age">
-                            <input type="number" id="phaseEnd" class="sidebar-input" placeholder="End Age">
+                    <!-- Phase mode: start/end date -->
+                    <div class="form-field" id="field-ages" style="gap:8px;">
+                        <div class="form-field">
+                            <span class="form-label">Start Date</span>
+                            <input type="date" id="phaseStartDate" class="sidebar-input">
+                        </div>
+                        <div class="form-field">
+                            <span class="form-label">End Date</span>
+                            <input type="date" id="phaseEndDate" class="sidebar-input">
                         </div>
                     </div>
 
@@ -321,8 +411,14 @@
 
             <div class="accordion open" id="acc-list">
                 <div class="accordion-header" onclick="toggleAccordion('acc-list')">
-                    <span class="acc-title">Other Calendars</span>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <span class="acc-title">Other Calendars</span>
+                        <span id="arrange-label-chip" style="font-size:0.62rem; color:var(--text-muted); display:none;"></span>
+                    </div>
                     <div class="acc-actions">
+                        <button class="acc-btn" onclick="openArrangeMenu(event)" id="btn-arrange" title="Arrange">
+                            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 4"/><polyline points="3 12 4 13 6 10"/><polyline points="3 18 4 19 6 16"/></svg>
+                        </button>
                         <button class="acc-btn" onclick="openAddEvent(event)" title="Add New"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
                         <button class="acc-btn chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
                     </div>
@@ -333,36 +429,104 @@
 
         </div>
 
+        <!-- ── SETTINGS PANEL ── -->
+        <div id="settings-panel">
+            <div class="settings-panel-header">
+                <button class="settings-back-btn" onclick="closeSettings()" title="Back">
+                    <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </button>
+                <span class="settings-panel-title">Settings</span>
+            </div>
+
+            <!-- Configuration -->
+            <div class="settings-section">
+                <div class="settings-section-label">Configuration</div>
+                <div class="form-field">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" id="dobInput" class="sidebar-input">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Target Age</label>
+                    <input type="number" id="targetAgeInput" class="sidebar-input" placeholder="e.g., 90" min="1" max="150">
+                </div>
+            </div>
+
+            <!-- Theme -->
+            <div class="settings-section">
+                <div class="settings-section-label">Theme</div>
+                <div class="theme-switcher">
+                    <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">dark</button>
+                    <button class="theme-btn" data-theme="light" onclick="setTheme('light')">light</button>
+                    <button class="theme-btn" data-theme="miku" onclick="setTheme('miku')">✦ miku</button>
+                </div>
+            </div>
+
+            <!-- GitHub Sync -->
+            <div class="settings-section">
+                <div class="settings-section-label" style="display:flex;align-items:center;gap:6px;">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub Sync
+                </div>
+                <div class="form-field">
+                    <span class="form-label">Username</span>
+                    <input type="text" id="gh-username" class="sidebar-input" placeholder="your-username" oninput="ghSaveCreds()">
+                </div>
+                <div class="form-field">
+                    <span class="form-label">Repository</span>
+                    <input type="text" id="gh-repo" class="sidebar-input" placeholder="repo-name" oninput="ghSaveCreds()">
+                </div>
+                <div class="form-field">
+                    <span class="form-label">Personal Access Token</span>
+                    <div style="position:relative;">
+                        <input type="password" id="gh-token" class="sidebar-input" placeholder="ghp_..." style="padding-right: 32px;" oninput="ghSaveCreds()">
+                        <button onclick="ghToggleToken()" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);padding:2px;" title="Show/hide token">
+                            <svg id="gh-eye" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="gh-status" style="font-size:0.75rem; min-height:18px; padding: 2px 0; transition: color 0.2s;"></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <button class="btn-secondary" onclick="githubLoad()" style="justify-content:center; gap:5px;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+                        Load
+                    </button>
+                    <button class="btn-primary" onclick="githubSave()" style="display:flex;align-items:center;justify-content:center;gap:5px;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 17 12 21 8 17" transform="rotate(180 12 19)"/><line x1="12" y1="12" x2="12" y2="3"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <!-- Data -->
+            <div class="settings-section">
+                <div class="settings-section-label">Data</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); line-height:1.5; margin-bottom:4px;">
+                    Hapus semua data kalender dari browser ini. Aksi ini tidak bisa dibatalkan.
+                </div>
+                <button class="btn-secondary" onclick="showClearCacheConfirm()" style="justify-content:center; gap:6px; color:#e05252; border-color:rgba(224,82,82,0.35);" onmouseover="this.style.background='rgba(224,82,82,0.08)';this.style.borderColor='#e05252'" onmouseout="this.style.background='';this.style.borderColor='rgba(224,82,82,0.35)'">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
+                    Hapus Cache
+                </button>
+            </div>
+        </div>
+
         <div class="sidebar-bottom">
-            <button class="sidebar-item" id="btn-settings" onclick="toggleSettings(event)">
-                <svg class="icon-main" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span class="sidebar-label">
-                    Settings
-                    <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke-width:2; fill:none; stroke:currentColor;"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                </span>
-            </button>
+            <div class="sidebar-bottom-row">
+                <button class="sidebar-item" id="btn-settings" onclick="toggleSettings(event)">
+                    <svg class="icon-main" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span class="sidebar-label">Settings</span>
+                </button>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="Open GitHub">
+                    <button class="sidebar-icon-btn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    </button>
+                </a>
+            </div>
         </div>
 
     </aside>
-
-    <div id="settings-popover">
-        <div class="popover-section-label">CONFIGURATION</div>
-        <div style="margin-bottom: 12px;">
-            <label style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 6px; text-transform: uppercase; font-weight: 600;">Date of Birth</label>
-            <input type="date" id="dobInput" class="sidebar-input">
-        </div>
-        <div style="margin-bottom: 24px;">
-            <label style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 6px; text-transform: uppercase; font-weight: 600;">Target Age</label>
-            <input type="number" id="targetAgeInput" placeholder="e.g., 90" min="1" max="150" class="sidebar-input">
-        </div>
-
-        <div class="popover-section-label">THEME</div>
-        <div class="theme-switcher">
-            <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">dark</button>
-            <button class="theme-btn" data-theme="light" onclick="setTheme('light')">light</button>
-            <button class="theme-btn" data-theme="miku" onclick="setTheme('miku')">✦ miku</button>
-        </div>
-    </div>
 
     <main id="main-content">
         <button id="btn-fullscreen-main" class="btn-fullscreen" onclick="toggleFullscreen()" title="Fullscreen">
@@ -398,6 +562,84 @@
         </button>
     </div>
 
+    <!-- Arrange dropdown -->
+    <div id="arrange-menu" class="arrange-menu">
+        <div class="submenu-label">Arrange</div>
+        <button class="arrange-item" id="arrange-sort-item"
+            onmouseenter="showSortSubmenu(this)"
+            onmouseleave="hideSortSubmenuDelayed()">
+            <span class="arrange-item-left">
+                <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 4"/><polyline points="3 12 4 13 6 10"/><polyline points="3 18 4 19 6 16"/></svg>
+                Sort
+            </span>
+            <svg class="arrange-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <button class="arrange-item" id="arrange-filter-item"
+            onmouseenter="showFilterSubmenu(this)"
+            onmouseleave="hideFilterSubmenuDelayed()">
+            <span class="arrange-item-left">
+                <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                Filter
+            </span>
+            <svg class="arrange-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+
+    <!-- Sort Submenu -->
+    <div id="sort-submenu" class="arrange-submenu"
+        onmouseenter="cancelSortSubmenuHide()"
+        onmouseleave="hideSortSubmenuDelayed()">
+        <div class="submenu-label">Sort by duration</div>
+        <button class="arrange-subitem" id="sort-none-btn" onclick="setSortMode('none')">
+            Default
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="arrange-subitem" id="sort-asc-btn" onclick="setSortMode('asc')">
+            ↑ Shortest first
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="arrange-subitem" id="sort-desc-btn" onclick="setSortMode('desc')">
+            ↓ Longest first
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <div class="submenu-label" style="margin-top:4px;">Sort by date</div>
+        <button class="arrange-subitem" id="sort-earliest-btn" onclick="setSortMode('earliest')">
+            ↑ Earliest first
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="arrange-subitem" id="sort-latest-btn" onclick="setSortMode('latest')">
+            ↓ Latest first
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <div class="arrange-divider" style="margin-top:4px;"></div>
+        <button class="arrange-subitem" id="sort-custom-btn" onclick="setSortMode('custom')">
+            <span style="display:flex;align-items:center;gap:6px;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="5" x2="9" y2="19"/><polyline points="16 5 19 2 22 5"/><polyline points="16 19 19 22 22 19"/><line x1="19" y1="2" x2="19" y2="22"/></svg>
+                Custom order
+            </span>
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+    </div>
+
+    <!-- Filter Submenu -->
+    <div id="filter-submenu" class="arrange-submenu"
+        onmouseenter="cancelFilterSubmenuHide()"
+        onmouseleave="hideFilterSubmenuDelayed()">
+        <div class="submenu-label">Show type</div>
+        <button class="arrange-subitem" id="filter-all-btn" onclick="setFilterMode('all')">
+            All items
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="arrange-subitem" id="filter-events-btn" onclick="setFilterMode('events')">
+            📍 Events only
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button class="arrange-subitem" id="filter-phases-btn" onclick="setFilterMode('phases')">
+            ✦ Phases only
+            <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+    </div>
+
     <!-- Confirmation Modal -->
     <div id="confirm-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:4000; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
         <div id="confirm-box" style="background:var(--card); border:1px solid var(--border-light); border-radius:14px; padding:24px 28px; width:280px; box-shadow:0 16px 48px rgba(0,0,0,0.5); display:flex; flex-direction:column; gap:12px;">
@@ -406,6 +648,23 @@
             <div style="display:flex; gap:8px; margin-top:4px;">
                 <button onclick="confirmCancel()" style="flex:1; padding:9px; border-radius:7px; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:'Inter',sans-serif; font-size:0.82rem; cursor:pointer; font-weight:500; transition:background 0.2s;" onmouseover="this.style.background='var(--card)'" onmouseout="this.style.background='var(--surface)'">Batal</button>
                 <button onclick="confirmDelete()" style="flex:1; padding:9px; border-radius:7px; background:#c0392b; border:none; color:#fff; font-family:'Inter',sans-serif; font-size:0.82rem; cursor:pointer; font-weight:600; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear Cache Confirm Modal -->
+    <div id="clear-cache-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:4000; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+        <div style="background:var(--card); border:1px solid var(--border-light); border-radius:14px; padding:24px 28px; width:290px; box-shadow:0 16px 48px rgba(0,0,0,0.5); display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:32px;height:32px;border-radius:8px;background:rgba(224,82,82,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#e05252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                </div>
+                <div style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; color:var(--text);">Hapus Cache?</div>
+            </div>
+            <div style="font-size:0.82rem; color:var(--text-mid); line-height:1.6;">Semua data kalender (events, phases, settings) akan dihapus permanen dari browser ini. Pastikan sudah backup ke GitHub jika diperlukan.</div>
+            <div style="display:flex; gap:8px; margin-top:4px;">
+                <button onclick="document.getElementById('clear-cache-overlay').style.display='none'" style="flex:1; padding:9px; border-radius:7px; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:'Inter',sans-serif; font-size:0.82rem; cursor:pointer; font-weight:500; transition:background 0.2s;" onmouseover="this.style.background='var(--card)'" onmouseout="this.style.background='var(--surface)'">Batal</button>
+                <button onclick="executeClearCache()" style="flex:1; padding:9px; border-radius:7px; background:#c0392b; border:none; color:#fff; font-family:'Inter',sans-serif; font-size:0.82rem; cursor:pointer; font-weight:600; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Hapus Semua</button>
             </div>
         </div>
     </div>
@@ -444,6 +703,7 @@
 
         setTheme(appData.theme || 'dark');
         document.addEventListener('mousemove', updateTooltipPos);
+        ghLoadCreds();
         render();
     }
 
@@ -468,23 +728,35 @@
         document.getElementById('phaseName').focus();
     }
 
-    // --- SETTINGS POPOVER ---
+    // --- SETTINGS PANEL ---
     function toggleSettings(e) {
         if(e) e.stopPropagation();
-        const popover = document.getElementById('settings-popover');
-        popover.classList.toggle('open');
+        const isOpen = document.body.classList.contains('settings-open');
+        if (isOpen) {
+            closeSettings();
+        } else {
+            toggleSidebar(true);
+            document.body.classList.add('settings-open');
+        }
+    }
+
+    function closeSettings() {
+        document.body.classList.remove('settings-open');
     }
 
     document.addEventListener('click', (e) => {
-        const popover = document.getElementById('settings-popover');
-        const btn = document.getElementById('btn-settings');
-        if (popover && btn && !popover.contains(e.target) && !btn.contains(e.target)) {
-            popover.classList.remove('open');
-        }
-        // Close dot menu
         const dotMenu = document.getElementById('dot-menu');
         if (dotMenu && !dotMenu.contains(e.target)) {
             closeDotMenu();
+        }
+        const arrangeMenu = document.getElementById('arrange-menu');
+        const sortSub = document.getElementById('sort-submenu');
+        const filterSub = document.getElementById('filter-submenu');
+        const arrangeBtn = document.getElementById('btn-arrange');
+        if (arrangeMenu && !arrangeMenu.contains(e.target) &&
+            !sortSub.contains(e.target) && !filterSub.contains(e.target) &&
+            e.target !== arrangeBtn && !arrangeBtn?.contains(e.target)) {
+            closeArrangeMenu();
         }
     });
 
@@ -517,6 +789,7 @@
         grid.appendChild(createDiv('axis-label', ''));
         for (let w = 1; w <= 52; w++)
             grid.appendChild(createDiv('axis-label', w % 5 === 0 || w === 1 ? w : ''));
+        grid.appendChild(createDiv('axis-label', '')); // top-right empty cell
 
         for (let y = 0; y < appData.targetAge; y++) {
             // Y-label: show year every 5 ages with a dashed connector line
@@ -554,15 +827,25 @@
                     <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px;">📅 ${dateRange}</div>
                 `;
 
-                const activePhase = appData.items.find(i =>
-                    i.type === 'phase' && y >= i.start && y <= i.end && !hiddenIds.has(i.id));
+                const activePhase = appData.items.find(i => {
+                    if (i.type !== 'phase' || hiddenIds.has(i.id)) return false;
+                    if (!(filterMode === 'all' || filterMode === 'phases')) return false;
+                    if (i.startDate && i.endDate) {
+                        const sd = new Date(i.startDate + 'T00:00:00');
+                        const ed = new Date(i.endDate + 'T23:59:59');
+                        return weekStart <= ed && weekEnd >= sd;
+                    }
+                    return y >= i.start && y <= i.end;
+                });
+
                 if (activePhase) {
                     bgColor = activePhase.color;
                     tooltipContent += `<div style="color:${bgColor}; font-weight:500;">✦ ${activePhase.name}</div>`;
                 }
 
                 const activeEvent = appData.items.find(i =>
-                    i.type === 'event' && i.age == y && i.week == w && !hiddenIds.has(i.id));
+                    i.type === 'event' && i.age == y && i.week == w && !hiddenIds.has(i.id)
+                    && (filterMode === 'all' || filterMode === 'events'));
                 if (activeEvent) {
                     // Color the entire box with the event color
                     bgColor = activeEvent.color;
@@ -579,6 +862,12 @@
                 box.onmouseleave = hideTooltip;
                 grid.appendChild(box);
             }
+
+            // Right-side age label — every single age
+            const ageLabel = document.createElement('div');
+            ageLabel.className = 'y-age-label';
+            ageLabel.textContent = y;
+            grid.appendChild(ageLabel);
         }
 
         const remCount = totalCount - livedCount;
@@ -604,6 +893,11 @@
         const dayFmt   = { day: 'numeric', month: 'short', year: 'numeric' };
 
         if (item.type === 'phase') {
+            if (item.startDate && item.endDate) {
+                const sd = new Date(item.startDate + 'T12:00:00');
+                const ed = new Date(item.endDate   + 'T12:00:00');
+                return `${sd.toLocaleDateString('en-US', dayFmt)} – ${ed.toLocaleDateString('en-US', dayFmt)}`;
+            }
             const startDate = new Date(dob.getFullYear() + item.start, dob.getMonth(), dob.getDate());
             const endDate   = new Date(dob.getFullYear() + item.end,   dob.getMonth(), dob.getDate());
             return `${startDate.toLocaleDateString('en-US', monthFmt)} – ${endDate.toLocaleDateString('en-US', monthFmt)}`;
@@ -611,23 +905,312 @@
             if (item.date) {
                 return new Date(item.date + 'T12:00:00').toLocaleDateString('en-US', dayFmt);
             }
-            // fallback: reconstruct from age + week
             const ageStart  = new Date(dob.getFullYear() + item.age, dob.getMonth(), dob.getDate());
             const eventDate = new Date(ageStart.getTime() + (item.week - 1) * 7 * 24 * 60 * 60 * 1000);
             return eventDate.toLocaleDateString('en-US', dayFmt);
         }
     }
 
+    // --- ARRANGE STATE ---
+    let sortMode = 'none';
+    let filterMode = 'all'; // 'all' | 'events' | 'phases'
+    const sortLabels = { none: null, asc: '↑ shortest first', desc: '↓ longest first', earliest: '↑ earliest first', latest: '↓ latest first', custom: 'custom order' };
+    const filterLabels = { all: null, events: 'events only', phases: 'phases only' };
+
+    // --- ARRANGE MENU ---
+    let _sortHideTimer = null;
+    let _filterHideTimer = null;
+
+    function openArrangeMenu(e) {
+        e.stopPropagation();
+        const menu = document.getElementById('arrange-menu');
+        const isOpen = menu.classList.contains('open');
+        closeArrangeMenu();
+        if (!isOpen) {
+            const btn = e.currentTarget;
+            const rect = btn.getBoundingClientRect();
+            const menuW = 140;
+            let left = rect.right - menuW;
+            if (left < 8) left = 8;
+            menu.style.left = left + 'px';
+            menu.style.top = (rect.bottom + 4) + 'px';
+            menu.classList.add('open');
+            updateArrangeItemStates();
+        }
+    }
+
+    function closeArrangeMenu() {
+        document.getElementById('arrange-menu').classList.remove('open');
+        closeSortSubmenu();
+        closeFilterSubmenu();
+    }
+
+    function updateArrangeItemStates() {
+        document.getElementById('arrange-sort-item').classList.toggle('has-active', sortMode !== 'none');
+        document.getElementById('arrange-filter-item').classList.toggle('has-active', filterMode !== 'all');
+    }
+
+    function showSortSubmenu(el) {
+        cancelSortSubmenuHide();
+        closeFilterSubmenu();
+        const parentMenu = document.getElementById('arrange-menu');
+        const submenu = document.getElementById('sort-submenu');
+        const pRect = parentMenu.getBoundingClientRect();
+        const iRect = el.getBoundingClientRect();
+        submenu.style.top = iRect.top + 'px';
+        submenu.style.left = (pRect.right + 4) + 'px';
+        submenu.classList.add('open');
+        updateSortSubmenuActive();
+    }
+
+    function hideSortSubmenuDelayed() {
+        _sortHideTimer = setTimeout(closeSortSubmenu, 180);
+    }
+
+    function cancelSortSubmenuHide() {
+        clearTimeout(_sortHideTimer);
+    }
+
+    function closeSortSubmenu() {
+        document.getElementById('sort-submenu').classList.remove('open');
+    }
+
+    function showFilterSubmenu(el) {
+        cancelFilterSubmenuHide();
+        closeSortSubmenu();
+        const parentMenu = document.getElementById('arrange-menu');
+        const submenu = document.getElementById('filter-submenu');
+        const pRect = parentMenu.getBoundingClientRect();
+        const iRect = el.getBoundingClientRect();
+        submenu.style.top = iRect.top + 'px';
+        submenu.style.left = (pRect.right + 4) + 'px';
+        submenu.classList.add('open');
+        updateFilterSubmenuActive();
+    }
+
+    function hideFilterSubmenuDelayed() {
+        _filterHideTimer = setTimeout(closeFilterSubmenu, 180);
+    }
+
+    function cancelFilterSubmenuHide() {
+        clearTimeout(_filterHideTimer);
+    }
+
+    function closeFilterSubmenu() {
+        document.getElementById('filter-submenu').classList.remove('open');
+    }
+
+    function setSortMode(mode) {
+        if (mode === 'custom' && sortMode !== 'custom') {
+            initCustomOrder();
+        }
+        sortMode = mode;
+        closeArrangeMenu();
+        renderSidebarViewList();
+    }
+
+    function setFilterMode(mode) {
+        filterMode = mode;
+        closeArrangeMenu();
+        render();
+    }
+
+    function updateSortSubmenuActive() {
+        ['none', 'asc', 'desc', 'earliest', 'latest', 'custom'].forEach(m => {
+            const btn = document.getElementById(`sort-${m}-btn`);
+            if (btn) btn.classList.toggle('active', sortMode === m);
+        });
+    }
+
+    function updateFilterSubmenuActive() {
+        ['all', 'events', 'phases'].forEach(m => {
+            const btn = document.getElementById(`filter-${m}-btn`);
+            if (btn) btn.classList.toggle('active', filterMode === m);
+        });
+    }
+
+    function getItemDuration(item) {
+        if (item.type === 'phase') {
+            if (item.startDate && item.endDate) {
+                const sd = new Date(item.startDate + 'T12:00:00');
+                const ed = new Date(item.endDate   + 'T12:00:00');
+                return Math.round((ed - sd) / (7 * 24 * 60 * 60 * 1000));
+            }
+            return (item.end - item.start) * 52;
+        }
+        return 1;
+    }
+
+    function getItemStartTime(item) {
+        const dob = new Date(appData.dob + 'T12:00:00');
+        if (item.type === 'phase') {
+            if (item.startDate) return new Date(item.startDate + 'T12:00:00').getTime();
+            return new Date(dob.getFullYear() + item.start, dob.getMonth(), dob.getDate()).getTime();
+        } else {
+            if (item.date) return new Date(item.date + 'T12:00:00').getTime();
+            const ageStart = new Date(dob.getFullYear() + item.age, dob.getMonth(), dob.getDate());
+            return ageStart.getTime() + (item.week - 1) * 7 * 24 * 60 * 60 * 1000;
+        }
+    }
+
+    // --- CUSTOM ORDER HELPERS ---
+    function initCustomOrder() {
+        // Snapshot current visual order (respect active sort for initial arrangement)
+        let items = [...appData.items];
+        if (sortMode === 'asc') items.sort((a, b) => getItemDuration(a) - getItemDuration(b));
+        else if (sortMode === 'desc') items.sort((a, b) => getItemDuration(b) - getItemDuration(a));
+        else if (sortMode === 'earliest') items.sort((a, b) => getItemStartTime(a) - getItemStartTime(b));
+        else if (sortMode === 'latest') items.sort((a, b) => getItemStartTime(b) - getItemStartTime(a));
+        appData.customOrder = items.map(i => i.id);
+        save();
+    }
+
+    function syncCustomOrder() {
+        // Ensure customOrder contains all current IDs (add new ones at end, remove deleted ones)
+        if (!appData.customOrder) appData.customOrder = [];
+        const existingIds = new Set(appData.items.map(i => i.id));
+        // Remove deleted
+        appData.customOrder = appData.customOrder.filter(id => existingIds.has(id));
+        // Add new at end
+        appData.items.forEach(item => {
+            if (!appData.customOrder.includes(item.id)) appData.customOrder.push(item.id);
+        });
+    }
+
+    function getCustomOrderedItems(items) {
+        syncCustomOrder();
+        const orderMap = new Map(appData.customOrder.map((id, idx) => [id, idx]));
+        return [...items].sort((a, b) => {
+            const ai = orderMap.has(a.id) ? orderMap.get(a.id) : 999999;
+            const bi = orderMap.has(b.id) ? orderMap.get(b.id) : 999999;
+            return ai - bi;
+        });
+    }
+
+    function moveItemInOrder(id, dir) {
+        syncCustomOrder();
+        const idx = appData.customOrder.indexOf(id);
+        if (idx === -1) return;
+        // When filter is active, move among visible items only
+        const list = document.getElementById('viewListContainer');
+        const visibleIds = [...list.querySelectorAll('.list-item')].map(el => parseInt(el.dataset.id));
+        const visIdx = visibleIds.indexOf(id);
+        const targetVisIdx = visIdx + dir;
+        if (targetVisIdx < 0 || targetVisIdx >= visibleIds.length) return;
+        const swapId = visibleIds[targetVisIdx];
+        const swapIdx = appData.customOrder.indexOf(swapId);
+        if (swapIdx === -1) return;
+        [appData.customOrder[idx], appData.customOrder[swapIdx]] = [appData.customOrder[swapIdx], appData.customOrder[idx]];
+        save();
+        renderSidebarViewList();
+    }
+
+    // --- DRAG AND DROP ---
+    let _dragSrcId = null;
+
+    function onDragStart(e, id) {
+        _dragSrcId = id;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => e.target.closest('.list-item').classList.add('dragging'), 0);
+    }
+
+    function onDragEnd(e) {
+        document.querySelectorAll('.list-item').forEach(el => {
+            el.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom');
+        });
+        _dragSrcId = null;
+    }
+
+    function onDragOver(e, id) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const el = e.currentTarget;
+        document.querySelectorAll('.list-item').forEach(x => x.classList.remove('drag-over-top', 'drag-over-bottom'));
+        const rect = el.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+        if (e.clientY < midY) el.classList.add('drag-over-top');
+        else el.classList.add('drag-over-bottom');
+    }
+
+    function onDrop(e, targetId) {
+        e.preventDefault();
+        if (_dragSrcId === null || _dragSrcId === targetId) return;
+        const el = e.currentTarget;
+        const rect = el.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+        const insertBefore = e.clientY < midY;
+
+        syncCustomOrder();
+        const srcIdx = appData.customOrder.indexOf(_dragSrcId);
+        const tgtIdx = appData.customOrder.indexOf(targetId);
+        if (srcIdx === -1 || tgtIdx === -1) return;
+
+        appData.customOrder.splice(srcIdx, 1);
+        const newTgtIdx = appData.customOrder.indexOf(targetId);
+        const insertAt = insertBefore ? newTgtIdx : newTgtIdx + 1;
+        appData.customOrder.splice(insertAt, 0, _dragSrcId);
+        save();
+        renderSidebarViewList();
+    }
+
     // --- SIDEBAR LIST RENDER (View Section) ---
     function renderSidebarViewList() {
         const list = document.getElementById('viewListContainer');
         list.innerHTML = '';
-        appData.items.forEach(item => {
+
+        // Arrange chip label
+        const labelChip = document.getElementById('arrange-label-chip');
+        const btn = document.getElementById('btn-arrange');
+        const chipParts = [];
+        if (sortMode !== 'none') chipParts.push(sortLabels[sortMode]);
+        if (filterMode !== 'all') chipParts.push(filterLabels[filterMode]);
+        if (chipParts.length) {
+            labelChip.textContent = chipParts.join(' · ');
+            labelChip.style.display = 'inline';
+            if (btn) btn.style.color = 'var(--text)';
+        } else {
+            labelChip.style.display = 'none';
+            if (btn) btn.style.color = '';
+        }
+
+        // Filter by type
+        let items = [...appData.items];
+        if (filterMode === 'events') items = items.filter(i => i.type === 'event');
+        else if (filterMode === 'phases') items = items.filter(i => i.type === 'phase');
+
+        // Sort
+        if (sortMode === 'asc') {
+            items.sort((a, b) => getItemDuration(a) - getItemDuration(b));
+        } else if (sortMode === 'desc') {
+            items.sort((a, b) => getItemDuration(b) - getItemDuration(a));
+        } else if (sortMode === 'earliest') {
+            items.sort((a, b) => getItemStartTime(a) - getItemStartTime(b));
+        } else if (sortMode === 'latest') {
+            items.sort((a, b) => getItemStartTime(b) - getItemStartTime(a));
+        } else if (sortMode === 'custom') {
+            items = getCustomOrderedItems(items);
+        }
+
+        const isCustom = sortMode === 'custom';
+
+        items.forEach((item, idx) => {
             const el = document.createElement('div');
             el.className = 'list-item';
+            el.dataset.id = item.id;
             const isHidden = hiddenIds.has(item.id);
             const timeLabel = getItemTimeLabel(item);
-            
+
+            // Move buttons (only in custom mode)
+            const moveBtnsHtml = isCustom ? `
+                <div class="move-btns">
+                    <button class="move-btn" title="Move up" onclick="moveItemInOrder(${item.id}, -1)">
+                        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </button>
+                    <button class="move-btn" title="Move down" onclick="moveItemInOrder(${item.id}, 1)">
+                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                </div>` : '';
+
             el.innerHTML = `
                 <label class="event-checkbox-wrapper">
                     <input type="checkbox" class="event-checkbox-input" ${!isHidden ? 'checked' : ''} onchange="toggleFilter(${item.id})">
@@ -639,10 +1222,24 @@
                         <span class="event-time-label">${timeLabel}</span>
                     </div>
                 </label>
+                ${moveBtnsHtml}
                 <button class="dot-btn" onclick="openDotMenu(event, ${item.id})" title="Options">
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                 </button>
             `;
+
+            // Drag and drop for custom mode
+            if (isCustom) {
+                el.setAttribute('draggable', 'true');
+                el.addEventListener('dragstart', (e) => onDragStart(e, item.id));
+                el.addEventListener('dragend', onDragEnd);
+                el.addEventListener('dragover', (e) => onDragOver(e, item.id));
+                el.addEventListener('dragleave', () => {
+                    el.classList.remove('drag-over-top', 'drag-over-bottom');
+                });
+                el.addEventListener('drop', (e) => onDrop(e, item.id));
+            }
+
             list.appendChild(el);
         });
     }
@@ -733,8 +1330,8 @@
         editId = null;
         addPhaseMode();
         document.getElementById('phaseName').value = '';
-        document.getElementById('phaseStart').value = '';
-        document.getElementById('phaseEnd').value = '';
+        document.getElementById('phaseStartDate').value = '';
+        document.getElementById('phaseEndDate').value = '';
         document.getElementById('eventDate').value = '';
         document.getElementById('btnCancelEdit').style.display = 'none';
         document.getElementById('form-acc-title').innerText = "Add New Event";
@@ -760,6 +1357,12 @@
         return d.toISOString().split('T')[0];
     }
 
+    function getDateFromAge(age) {
+        const dob = new Date(appData.dob + 'T12:00:00');
+        const d = new Date(dob.getFullYear() + age, dob.getMonth(), dob.getDate());
+        return d.toISOString().split('T')[0];
+    }
+
     function submitPhase() {
         const name = document.getElementById('phaseName').value.trim();
         const color = document.getElementById('phaseColor').value;
@@ -767,10 +1370,15 @@
 
         let newItem;
         if (currentMode === 'phase') {
-            const val1 = parseInt(document.getElementById('phaseStart').value);
-            const val2 = parseInt(document.getElementById('phaseEnd').value) || val1;
-            if (isNaN(val1)) return;
-            newItem = { id: editId || Date.now(), type: 'phase', name, color, start: val1, end: val2 };
+            const startDateStr = document.getElementById('phaseStartDate').value;
+            const endDateStr = document.getElementById('phaseEndDate').value;
+            if (!startDateStr || !endDateStr) return;
+            // Compute age range from dates (for backward compat & sorting)
+            const startAge = getAgeWeekFromDate(startDateStr).age;
+            const endAge = getAgeWeekFromDate(endDateStr).age;
+            newItem = { id: editId || Date.now(), type: 'phase', name, color,
+                        startDate: startDateStr, endDate: endDateStr,
+                        start: startAge, end: endAge };
         } else {
             const dateStr = document.getElementById('eventDate').value;
             if (!dateStr) return;
@@ -797,11 +1405,11 @@
         
         if (item.type === 'phase') {
             addPhaseMode();
-            document.getElementById('phaseStart').value = item.start;
-            document.getElementById('phaseEnd').value = item.end;
+            // Use stored dates if available, else reconstruct from age
+            document.getElementById('phaseStartDate').value = item.startDate || getDateFromAge(item.start);
+            document.getElementById('phaseEndDate').value   = item.endDate   || getDateFromAge(item.end);
         } else {
             addEventMode();
-            // Populate date: use stored date if available, otherwise reconstruct from age/week
             const dateStr = item.date || getDateFromAgeWeek(item.age, item.week);
             document.getElementById('eventDate').value = dateStr;
         }
@@ -843,7 +1451,124 @@
         });
     }
     
+    // --- GITHUB SYNC ---
+    const GH_FILE = 'lifecalendar-data.json';
+    const GH_CREDS_KEY = 'myLifeCalendar_ghCreds';
+
+    function ghLoadCreds() {
+        try {
+            const c = JSON.parse(localStorage.getItem(GH_CREDS_KEY) || '{}');
+            if (c.username) document.getElementById('gh-username').value = c.username;
+            if (c.repo)     document.getElementById('gh-repo').value     = c.repo;
+            if (c.token)    document.getElementById('gh-token').value    = c.token;
+        } catch(e) {}
+    }
+
+    function ghSaveCreds() {
+        localStorage.setItem(GH_CREDS_KEY, JSON.stringify({
+            username: document.getElementById('gh-username').value.trim(),
+            repo:     document.getElementById('gh-repo').value.trim(),
+            token:    document.getElementById('gh-token').value.trim()
+        }));
+    }
+
+    function ghToggleToken() {
+        const inp = document.getElementById('gh-token');
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+    }
+
+    function ghGetCreds() {
+        return {
+            username: document.getElementById('gh-username').value.trim(),
+            repo:     document.getElementById('gh-repo').value.trim(),
+            token:    document.getElementById('gh-token').value.trim()
+        };
+    }
+
+    function ghStatus(msg, state = 'idle') {
+        const el = document.getElementById('gh-status');
+        el.style.color = state === 'error' ? '#e05252' : state === 'ok' ? '#4caf82' : 'var(--text-muted)';
+        el.innerText = msg;
+    }
+
+    async function githubSave() {
+        const { username, repo, token } = ghGetCreds();
+        if (!username || !repo || !token) { ghStatus('Fill in all fields.', 'error'); return; }
+        ghStatus('Saving to GitHub…');
+
+        const url = `https://api.github.com/repos/${username}/${repo}/contents/${GH_FILE}`;
+        const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+
+        // Fetch current SHA (needed to update existing file)
+        let sha = null;
+        try {
+            const r = await fetch(url, { headers });
+            if (r.ok) { sha = (await r.json()).sha; }
+            else if (r.status !== 404) { ghStatus(`Error ${r.status}: ${(await r.json()).message}`, 'error'); return; }
+        } catch(e) { ghStatus(`Network error: ${e.message}`, 'error'); return; }
+
+        const body = {
+            message: `Update life calendar data — ${new Date().toISOString().slice(0,10)}`,
+            content: btoa(unescape(encodeURIComponent(JSON.stringify(appData, null, 2))))
+        };
+        if (sha) body.sha = sha;
+
+        try {
+            const r = await fetch(url, { method: 'PUT', headers, body: JSON.stringify(body) });
+            if (r.ok) { ghStatus('✓ Saved successfully!', 'ok'); }
+            else { ghStatus(`Error: ${(await r.json()).message}`, 'error'); }
+        } catch(e) { ghStatus(`Network error: ${e.message}`, 'error'); }
+    }
+
+    async function githubLoad() {
+        const { username, repo, token } = ghGetCreds();
+        if (!username || !repo || !token) { ghStatus('Fill in all fields.', 'error'); return; }
+        ghStatus('Loading from GitHub…');
+
+        const url = `https://api.github.com/repos/${username}/${repo}/contents/${GH_FILE}`;
+        const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' };
+
+        try {
+            const r = await fetch(url, { headers });
+            if (!r.ok) { ghStatus(`Error: ${(await r.json()).message}`, 'error'); return; }
+            const d = await r.json();
+            const json = decodeURIComponent(escape(atob(d.content)));
+            const loaded = JSON.parse(json);
+            appData = { ...defaultData, ...loaded };
+            save();
+            setTheme(appData.theme || 'dark');
+            render();
+            ghStatus('✓ Loaded successfully!', 'ok');
+        } catch(e) { ghStatus(`Error: ${e.message}`, 'error'); }
+    }
+
     function save() { localStorage.setItem('myLifeCalendar_v4', JSON.stringify(appData)); }
+
+    // --- CLEAR CACHE ---
+    function showClearCacheConfirm() {
+        document.getElementById('clear-cache-overlay').style.display = 'flex';
+    }
+
+    function executeClearCache() {
+        localStorage.removeItem('myLifeCalendar_v4');
+        localStorage.removeItem('myLifeCalendar_ghCreds');
+        document.getElementById('clear-cache-overlay').style.display = 'none';
+        // Reset state
+        appData = JSON.parse(JSON.stringify(defaultData));
+        hiddenIds = new Set();
+        editId = null;
+        sortMode = 'none';
+        filterMode = 'all';
+        setTheme('dark');
+        document.getElementById('dobInput').value = appData.dob;
+        document.getElementById('targetAgeInput').value = appData.targetAge;
+        document.getElementById('gh-username').value = '';
+        document.getElementById('gh-repo').value = '';
+        document.getElementById('gh-token').value = '';
+        cancelEdit();
+        closeSettings();
+        render();
+    }
 
     init();
 </script>
