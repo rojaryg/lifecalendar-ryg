@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,377 +17,416 @@
             --text-mid: #999999;
             --accent: #efefef;
             --accent-glow: rgba(239,239,239,0.10);
-            --flow: #ffffff;
-            --flow-glow: rgba(255,255,255,0.15);
-            --flow-dim: rgba(255,255,255,0.07);
-            --success: #4caf82;
-            --danger: #e05252;
+            --lived: #333333;
             --radius: 14px;
             --radius-sm: 9px;
-            --lived: #333333;
+            
+            /* Sidebar Variables */
+            --sidebar-collapsed: 64px;
+            --sidebar-expanded: 280px; /* Diperlebar sedikit agar form muat rapi */
         }
         body[data-theme="light"] {
             --bg: #e2e0dc; --surface: #eceae6; --card: #ffffff;
             --border: #d0ceca; --border-light: #c0beba;
             --text: #141414; --text-muted: #9a9892; --text-mid: #4a4845;
             --accent: #141414; --accent-glow: rgba(20,20,20,0.08);
-            --flow: #141414; --flow-glow: rgba(20,20,20,0.18); --flow-dim: rgba(0,0,0,0.07);
-            --success: #2f8b66; --danger: #c94040; --lived: #c0beba;
+            --lived: #c0beba;
         }
         body[data-theme="miku"] {
             --bg: #FFF0F7; --surface: #f2fcfb; --card: #ffffff;
             --border: #99D5D0; --border-light: #BCE8E4;
             --text: #1A2B2A; --text-muted: #007871; --text-mid: #005D57;
             --accent: #E3007F; --accent-glow: rgba(227,0,127,0.14);
-            --flow: #00C4B6; --flow-glow: rgba(0,196,182,0.30); --flow-dim: rgba(0,196,182,0.15);
-            --success: #00a898; --danger: #d04b4b; --lived: #BCE8E4;
+            --lived: #BCE8E4;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        /* ── HIDE SCROLLBARS GLOBALLY ── */
+        * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; -ms-overflow-style: none; }
+        *::-webkit-scrollbar { display: none; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+            height: 100vh; display: flex; flex-direction: row; overflow: hidden;
             transition: background 0.3s ease, color 0.3s ease;
         }
 
+        /* ── LEFT SIDEBAR ── */
+        #left-sidebar {
+            width: var(--sidebar-collapsed); background: var(--surface); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-color 0.3s ease;
+            z-index: 1000; overflow: hidden; white-space: nowrap; flex-shrink: 0; 
+        }
+        body.sidebar-open #left-sidebar { width: var(--sidebar-expanded); }
+
+        .sidebar-header {
+            display: flex; align-items: center; height: 64px; padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+            transition: border-color 0.3s;
+        }
+        .sidebar-toggle {
+            background: transparent; border: none; color: var(--text-muted); cursor: pointer;
+            width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: background 0.2s, color 0.2s;
+        }
+        .sidebar-toggle:hover { background: var(--card); color: var(--text); }
+        .sidebar-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        .sidebar-title {
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 500;
+            letter-spacing: -0.02em; color: var(--text); margin-left: 12px; opacity: 0; pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        body.sidebar-open .sidebar-title { opacity: 1; pointer-events: auto; }
+
+        /* ── SIDEBAR SCROLL CONTENT ── */
+        .sidebar-content-scroll {
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        body.sidebar-open .sidebar-content-scroll { opacity: 1; pointer-events: auto; }
+
+        /* ── ACCORDION (SECTION) ── */
+        .accordion { border-bottom: 1px solid var(--border); transition: border-color 0.3s; }
+        .accordion-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; cursor: pointer; user-select: none; transition: background 0.2s;
+        }
+        .accordion-header:hover { background: var(--card); }
+        .acc-title { font-size: 0.80rem; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.2s; }
+        .accordion-header:hover .acc-title { color: var(--text); }
+        
+        .acc-actions { display: flex; align-items: center; gap: 4px; }
+        .acc-btn {
+            background: transparent; border: none; color: var(--text-muted); cursor: pointer;
+            width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+        .acc-btn:hover { background: var(--border-light); color: var(--text); }
+        .acc-btn svg { width: 16px; height: 16px; stroke-width: 2; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round;}
+        
+        .accordion-body { padding: 0 16px 16px; display: none; flex-direction: column; gap: 10px; }
+        .accordion.open .accordion-body { display: flex; }
+        
+        .chevron { transition: transform 0.2s; }
+        .accordion.open .chevron { transform: rotate(180deg); }
+
+        /* ── SIDEBAR FORM ELEMENTS ── */
+        .sidebar-input {
+            width: 100%; padding: 8px 10px; background: var(--card); border: 1px solid var(--border);
+            border-radius: 6px; color: var(--text); font-family: 'Inter', sans-serif;
+            font-size: 0.85rem; outline: none; transition: border-color 0.2s, background 0.3s;
+        }
+        .sidebar-input:focus { border-color: var(--accent); }
+        .sidebar-form-row { display: grid; grid-template-columns: 1fr 1fr 36px; gap: 8px; }
+        .sidebar-form-actions { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; margin-top: 4px; }
+
+        .btn-primary { background: var(--accent); color: var(--bg); border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; font-family: 'Inter', sans-serif; font-size: 0.8rem; cursor: pointer; width: 100%; transition: transform 0.1s, background 0.3s ease, color 0.3s ease; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; font-family: 'Inter', sans-serif; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; transition: background 0.2s, border-color 0.2s, color 0.3s ease; }
+        .btn-secondary:hover { border-color: var(--border-light); }
+        .btn-danger { color: var(--danger); border-color: var(--danger); }
+        .btn-danger:hover { background: rgba(224, 82, 82, 0.1); border-color: var(--danger); }
+
+        /* ── CHECKBOX LIST (VIEW SECTION) ── */
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-radius: 6px; transition: background 0.2s; margin-bottom: 2px; }
+        .list-item:hover { background: rgba(255,255,255,0.03); }
+        
+        .event-checkbox-wrapper { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; overflow: hidden; padding-left: 4px; }
+        .event-checkbox-input { display: none; }
+        .event-checkbox-box {
+            width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--box-color);
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
+        }
+        .event-checkbox-input:checked + .event-checkbox-box { background-color: var(--box-color); border-color: var(--box-color); }
+        .event-checkbox-box svg { width: 10px; height: 10px; stroke: var(--bg); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: scale(0.5); transition: all 0.2s; }
+        .event-checkbox-input:checked + .event-checkbox-box svg { opacity: 1; transform: scale(1); }
+        
+        .event-label { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); transition: opacity 0.2s; }
+        .event-checkbox-input:not(:checked) ~ .event-label { opacity: 0.5; text-decoration: line-through; }
+
+        .event-text { display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+        .event-time-label { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; transition: opacity 0.2s; }
+        .event-checkbox-input:not(:checked) ~ .event-text .event-label { opacity: 0.5; text-decoration: line-through; }
+        .event-checkbox-input:not(:checked) ~ .event-text .event-time-label { opacity: 0.35; }
+
+        .dot-btn {
+            background: transparent; border: none; color: var(--text-muted); cursor: pointer;
+            padding: 4px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+            opacity: 0.3; transition: color 0.2s, background 0.2s, opacity 0.2s; margin-right: 4px;
+        }
+        .list-item:hover .dot-btn { opacity: 1; }
+        .dot-btn:hover { color: var(--text); background: var(--border-light); }
+
+        /* ── BOTTOM SETTINGS BUTTON ── */
+        .sidebar-bottom { padding: 12px 16px 24px; flex-shrink: 0; }
+        .sidebar-item {
+            display: flex; align-items: center; padding: 10px 0; color: var(--text-muted); cursor: pointer;
+            border: none; background: transparent; width: 100%; text-align: left; transition: color 0.2s;
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; outline: none; border-radius: 8px; justify-content: center;
+        }
+        body.sidebar-open .sidebar-item { padding: 10px 16px; justify-content: flex-start; }
+        .sidebar-item:hover { color: var(--text); background: var(--card); }
+        .sidebar-item svg.icon-main { width: 22px; height: 22px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+        .sidebar-label { margin-left: 12px; opacity: 0; transition: opacity 0.2s; pointer-events: none; font-weight: 500; display: flex; justify-content: space-between; width: 100%; align-items: center; }
+        body.sidebar-open .sidebar-label { opacity: 1; }
+
+        /* ── MAIN CONTENT AREA ── */
+        #main-content { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; min-width: 0; }
+
+        /* Fullscreen Button in Main Area */
+        .btn-fullscreen {
+            position: absolute; top: 24px; right: 24px; z-index: 100;
+            background: transparent; border: 1px solid transparent; color: var(--text-muted);
+            cursor: pointer; width: 40px; height: 40px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .btn-fullscreen:hover { background: var(--surface); border-color: var(--border); color: var(--text); }
+        .btn-fullscreen svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
         /* ── HEADER ── */
-        .main-header {
-            padding: 36px 40px 16px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-        .main-header h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 600;
-            letter-spacing: -0.03em;
-            line-height: 1;
-            margin-bottom: 10px;
-        }
-        #header-stats {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            letter-spacing: 0.01em;
-        }
+        .main-header { padding: 36px 40px 16px; text-align: center; flex-shrink: 0; }
+        .main-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 400; font-style: italic; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 12px; color: var(--text); }
+        #header-stats { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0.01em; }
         #header-stats span { color: var(--text); font-weight: 500; }
 
         /* ── CALENDAR ── */
-        .calendar-container {
-            flex: 1;
-            padding: 24px 40px 80px;
-            overflow: auto;
-            display: flex;
-            justify-content: center;
-        }
-        .grid-scroll-wrapper { position: relative; }
-        .grid {
-            display: grid;
-            grid-template-columns: 40px repeat(52, 13px);
-            gap: 4px;
-        }
-        .axis-label {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .y-label { justify-content: flex-end; padding-right: 8px; }
-        .week-box {
-            width: 13px; height: 13px;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: crosshair;
-        }
+        .calendar-container { flex: 1; padding: 24px 40px 40px; overflow: auto; display: flex; justify-content: center; }
+        .grid-scroll-wrapper { position: relative; padding-bottom: 120px; }
+        .grid { display: grid; grid-template-columns: 56px repeat(52, 13px); gap: 4px; }
+        .axis-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.65rem; color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
+        .y-label { justify-content: flex-end; padding-right: 6px; gap: 0; }
+        .y-label-inner { display: flex; align-items: center; gap: 0; width: 100%; justify-content: flex-end; }
+        .y-year { font-size: 0.58rem; color: var(--text-mid); flex-shrink: 0; letter-spacing: -0.01em; transition: color 0.3s; }
+        .y-dash { flex: 1; height: 1px; border-top: 1px dashed var(--border-light); margin: 0 3px 0 4px; opacity: 0.6; }
+        .week-box { width: 13px; height: 13px; border: 1px solid var(--border); border-radius: 2px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: crosshair; }
         .week-box:hover { transform: scale(1.5); z-index: 10; border-color: var(--text); box-shadow: 0 0 15px rgba(0,0,0,0.2); }
         .week-box.lived { background-color: var(--lived); border-color: var(--lived); }
         .week-box.current { border: 2px solid var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
         .marker { width: 5px; height: 5px; background: var(--bg); border-radius: 50%; margin: 3px auto; }
 
-        /* ── BOTTOM BAR ── */
-        #bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0; right: 0;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            padding: 10px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            z-index: 1000;
-            white-space: nowrap;
-            transition: background 0.3s ease, border-color 0.3s ease;
+        /* ── SETTINGS POPOVER (DROPDOWN) ── */
+        #settings-popover {
+            position: fixed; bottom: 24px; left: calc(var(--sidebar-collapsed) + 12px);
+            background: var(--card); border: 1px solid var(--border-light); border-radius: 12px;
+            padding: 16px 20px; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            z-index: 1001; opacity: 0; pointer-events: none; transform: translateY(10px);
+            transition: opacity 0.2s, transform 0.2s, left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .bar-logo {
-            padding: 6px 14px 6px 10px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text);
-            letter-spacing: -0.01em;
-            cursor: default;
+        body.sidebar-open #settings-popover { left: calc(var(--sidebar-expanded) + 12px); }
+        #settings-popover.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+        .popover-section-label { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text-muted); font-weight: 600; margin-bottom: 12px; text-transform: uppercase; }
+        
+        .theme-switcher { display: flex; gap: 6px; }
+        .theme-btn {
+            flex: 1; background: transparent; border: 1px solid transparent; color: var(--text-muted);
+            padding: 8px 0; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif;
+            font-size: 0.85rem; font-weight: 500; transition: all 0.2s;
         }
-        .bar-sep {
-            width: 1px;
-            height: 18px;
-            background: var(--border-light);
-            margin: 0 2px;
-            flex-shrink: 0;
+        .theme-btn:hover { background: var(--surface); color: var(--text); }
+        .theme-btn.active { background: transparent; color: var(--text); border-color: var(--text); }
+
+        /* ── FORM LABELS ── */
+        .form-label {
+            font-size: 0.72rem; color: var(--text-muted); display: block;
+            margin-bottom: 5px; font-weight: 500; letter-spacing: 0.01em;
         }
-        .bar-btn {
-            padding: 6px 14px;
-            border-radius: 100px;
-            border: 1px solid transparent;
-            background: transparent;
-            color: var(--text-mid);
+        .form-field { display: flex; flex-direction: column; }
+
+        /* ── DOT DROPDOWN MENU ── */
+        .dot-menu {
+            position: fixed; background: var(--card); border: 1px solid var(--border-light);
+            border-radius: 8px; padding: 4px; z-index: 3000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35); display: none; min-width: 130px;
+        }
+        .dot-menu.open { display: block; }
+        .dot-menu-item {
+            display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 5px;
+            font-size: 0.82rem; cursor: pointer; color: var(--text); transition: background 0.15s;
+            background: transparent; border: none; width: 100%; text-align: left;
             font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.15s;
-            letter-spacing: 0.01em;
         }
-        .bar-btn:hover { background: var(--card); color: var(--text); }
-        .bar-btn.active {
-            border-color: var(--border-light);
-            color: var(--text);
-            background: var(--card);
-        }
-
-        /* ── BACKDROP ── */
-        #backdrop {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 998;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.2s;
-        }
-        #backdrop.open { opacity: 1; pointer-events: all; }
-
-        /* ── SLIDE-UP PANELS ── */
-        .slide-panel {
-            position: fixed;
-            bottom: 56px;
-            left: 50%;
-            transform: translateX(-50%) translateY(12px);
-            width: min(720px, calc(100vw - 32px));
-            background: var(--surface);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            box-shadow: 0 -8px 48px rgba(0,0,0,0.5);
-            z-index: 999;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.2s, transform 0.25s cubic-bezier(0.4,0,0.2,1),
-                        background 0.3s ease, border-color 0.3s ease;
-            overflow: hidden;
-        }
-        .slide-panel.open {
-            opacity: 1; pointer-events: all;
-            transform: translateX(-50%) translateY(0);
-        }
-        .panel-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 20px;
-            border-bottom: 1px solid var(--border);
-            transition: border-color 0.3s ease;
-        }
-        .panel-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.85rem; font-weight: 500;
-            color: var(--text-mid);
-            letter-spacing: 0.03em; text-transform: uppercase;
-        }
-        .panel-close {
-            background: none; border: none; color: var(--text-muted);
-            cursor: pointer; font-size: 1rem; padding: 2px 6px;
-            border-radius: 6px; transition: color 0.15s, background 0.15s;
-        }
-        .panel-close:hover { color: var(--text); background: var(--card); }
-        .panel-body { padding: 20px; }
-
-        /* ── PANEL: SETUP ── */
-        .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .section-label {
-            font-size: 0.65rem; text-transform: uppercase;
-            letter-spacing: 0.12em; color: var(--text-muted);
-            margin-bottom: 8px; display: block; font-weight: 500;
-        }
-        input, select {
-            width: 100%; padding: 10px 12px;
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); color: var(--text);
-            font-family: 'Inter', sans-serif; font-size: 0.85rem;
-            outline: none; transition: border-color 0.2s, background 0.3s ease;
-        }
-        input:focus, select:focus { border-color: var(--accent); }
-        .filter-list { display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto; }
-        .filter-item {
-            display: flex; align-items: center; gap: 10px;
-            font-size: 0.85rem; cursor: pointer; padding: 6px 8px;
-            border-radius: 6px; transition: background 0.2s;
-        }
-        .filter-item:hover { background: var(--card); }
-        .filter-item input { width: auto; }
-
-        /* ── PANEL: TAMBAH ── */
-        .tambah-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .tambah-left { display: flex; flex-direction: column; gap: 10px; }
-        .tambah-right { display: flex; flex-direction: column; }
-
-        .btn-primary {
-            background: var(--accent); color: var(--bg); border: none;
-            padding: 10px 16px; border-radius: var(--radius-sm);
-            font-weight: 600; font-family: 'Inter', sans-serif; font-size: 0.85rem;
-            cursor: pointer; width: 100%;
-            transition: transform 0.1s, background 0.3s ease, color 0.3s ease;
-        }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-secondary {
-            background: var(--card); color: var(--text);
-            border: 1px solid var(--border); padding: 10px 16px;
-            border-radius: var(--radius-sm); font-family: 'Inter', sans-serif;
-            cursor: pointer; font-size: 0.85rem;
-            transition: background 0.2s, border-color 0.2s, color 0.3s ease;
-        }
-        .btn-secondary:hover { border-color: var(--border-light); }
-
-        .data-item {
-            background: var(--card); border: 1px solid var(--border);
-            padding: 10px 12px; border-radius: var(--radius-sm);
-            margin-bottom: 8px; display: flex; justify-content: space-between;
-            align-items: center; font-size: 0.85rem;
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-        .data-item .actions { display: flex; gap: 8px; }
-        .data-item button { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
-        .data-item button:hover { color: var(--text); }
-        #dataList { flex: 1; overflow-y: auto; max-height: 180px; padding-right: 2px; }
+        .dot-menu-item:hover { background: var(--surface); }
+        .dot-menu-item svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .dot-menu-item.danger { color: #e05252; }
+        .dot-menu-item.danger:hover { background: rgba(224,82,82,0.1); }
 
         /* ── TOOLTIP ── */
-        #tooltip {
-            position: fixed; background: var(--surface);
-            border: 1px solid var(--border-light); color: var(--text);
-            padding: 12px 16px; border-radius: var(--radius-sm);
-            font-size: 0.8rem; pointer-events: none; opacity: 0;
-            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: opacity 0.2s;
-        }
+        #tooltip { position: fixed; background: var(--surface); border: 1px solid var(--border-light); color: var(--text); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.8rem; pointer-events: none; opacity: 0; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: opacity 0.2s; line-height: 1.4; }
     </style>
 </head>
 <body data-theme="dark">
 
-    <!-- Header -->
-    <header class="main-header">
-        <h2 id="header-weeks">4,680 Weeks</h2>
-        <div id="header-stats">
-            Progres: <span id="stat-lived">0</span> &bull; Sisa Minggu: <span id="stat-rem">0</span>
+    <aside id="left-sidebar">
+        
+        <div class="sidebar-header">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+            </button>
+            <span class="sidebar-title">Life Calendar</span>
         </div>
-    </header>
 
-    <!-- Calendar -->
-    <div class="calendar-container">
-        <div class="grid-scroll-wrapper">
-            <div class="grid" id="calendarGrid"></div>
-        </div>
-    </div>
-
-    <!-- Backdrop -->
-    <div id="backdrop" onclick="closeAllPanels()"></div>
-
-    <!-- Panel: Setup -->
-    <div class="slide-panel" id="setupPanel">
-        <div class="panel-header">
-            <span class="panel-title">Setup</span>
-            <button class="panel-close" onclick="closeAllPanels()">✕</button>
-        </div>
-        <div class="panel-body">
-            <div class="setup-grid">
-                <div>
-                    <label class="section-label">Tanggal Lahir</label>
-                    <input type="date" id="dobInput">
-                </div>
-                <div>
-                    <label class="section-label">Tampilkan / Sembunyikan</label>
-                    <div id="filterList" class="filter-list"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Panel: Tambah -->
-    <div class="slide-panel" id="tambahPanel">
-        <div class="panel-header">
-            <span class="panel-title" id="panel-tambah-title">Tambah Fase / Event</span>
-            <button class="panel-close" onclick="closeAllPanels()">✕</button>
-        </div>
-        <div class="panel-body">
-            <div class="tambah-grid">
-                <div class="tambah-left">
-                    <select id="modeSelect" onchange="onModeChange(this.value)">
-                        <option value="phase">✦ Fase Kehidupan</option>
-                        <option value="event">📍 Event Spesifik</option>
-                    </select>
-                    <input type="text" id="phaseName" placeholder="Contoh: Masa Kecil, Karir...">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 52px; gap: 8px;">
-                        <input type="number" id="phaseStart" placeholder="Umur Mulai">
-                        <input type="number" id="phaseEnd" placeholder="Umur Selesai">
-                        <input type="color" id="phaseColor" value="#efefef" style="height: 42px; padding: 3px;">
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px;">
-                        <button class="btn-primary" id="btnSubmitPhase" onclick="submitPhase()">Simpan Fase</button>
-                        <button id="btnCancelEdit" class="btn-secondary" style="display: none; width: auto; padding: 10px 16px;" onclick="cancelEdit()">Batal</button>
+        <div class="sidebar-content-scroll">
+            
+            <div class="accordion" id="acc-form">
+                <div class="accordion-header" onclick="toggleAccordion('acc-form')">
+                    <span class="acc-title" id="form-acc-title">Add New Event</span>
+                    <div class="acc-actions">
+                        <button class="acc-btn chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
                     </div>
                 </div>
-                <div class="tambah-right">
-                    <label class="section-label">Tersimpan</label>
-                    <div id="dataList"></div>
+                <div class="accordion-body">
+                    <div class="form-field">
+                        <span class="form-label">Type</span>
+                        <select id="modeSelect" class="sidebar-input" onchange="onModeChange(this.value)">
+                            <option value="phase">✦ Life Phase</option>
+                            <option value="event">📍 Specific Event</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <span class="form-label">Name</span>
+                        <input type="text" id="phaseName" class="sidebar-input" placeholder="e.g., Childhood, Career...">
+                    </div>
+
+                    <!-- Phase mode: start/end age -->
+                    <div class="form-field" id="field-ages">
+                        <span class="form-label">Start Age / End Age</span>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <input type="number" id="phaseStart" class="sidebar-input" placeholder="Start Age">
+                            <input type="number" id="phaseEnd" class="sidebar-input" placeholder="End Age">
+                        </div>
+                    </div>
+
+                    <!-- Event mode: date picker -->
+                    <div class="form-field" id="field-date" style="display:none;">
+                        <span class="form-label">Date</span>
+                        <input type="date" id="eventDate" class="sidebar-input">
+                    </div>
+
+                    <!-- Color always visible -->
+                    <div class="form-field">
+                        <span class="form-label">Color</span>
+                        <input type="color" id="phaseColor" class="sidebar-input" value="#efefef" style="padding: 2px; cursor: pointer; height: 34px; width: 100%;">
+                    </div>
+                    
+                    <div class="sidebar-form-actions">
+                        <button class="btn-primary" id="btnSubmitPhase" onclick="submitPhase()">Save Data</button>
+                        <button id="btnCancelEdit" class="btn-secondary" style="display: none;" onclick="cancelEdit()">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> 
+                            Back
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <div class="accordion open" id="acc-list">
+                <div class="accordion-header" onclick="toggleAccordion('acc-list')">
+                    <span class="acc-title">Other Calendars</span>
+                    <div class="acc-actions">
+                        <button class="acc-btn" onclick="openAddEvent(event)" title="Add New"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                        <button class="acc-btn chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    </div>
+                </div>
+                <div class="accordion-body" style="padding-top: 8px; gap: 0;" id="viewListContainer">
+                    </div>
+            </div>
+
+        </div>
+
+        <div class="sidebar-bottom">
+            <button class="sidebar-item" id="btn-settings" onclick="toggleSettings(event)">
+                <svg class="icon-main" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span class="sidebar-label">
+                    Settings
+                    <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke-width:2; fill:none; stroke:currentColor;"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                </span>
+            </button>
+        </div>
+
+    </aside>
+
+    <div id="settings-popover">
+        <div class="popover-section-label">CONFIGURATION</div>
+        <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 6px; text-transform: uppercase; font-weight: 600;">Date of Birth</label>
+            <input type="date" id="dobInput" class="sidebar-input">
+        </div>
+        <div style="margin-bottom: 24px;">
+            <label style="font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 6px; text-transform: uppercase; font-weight: 600;">Target Age</label>
+            <input type="number" id="targetAgeInput" placeholder="e.g., 90" min="1" max="150" class="sidebar-input">
+        </div>
+
+        <div class="popover-section-label">THEME</div>
+        <div class="theme-switcher">
+            <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">dark</button>
+            <button class="theme-btn" data-theme="light" onclick="setTheme('light')">light</button>
+            <button class="theme-btn" data-theme="miku" onclick="setTheme('miku')">✦ miku</button>
         </div>
     </div>
 
-    <!-- Bottom Bar -->
-    <div id="bottom-bar">
-        <span class="bar-logo">Life Calendar ✦</span>
-        <div class="bar-sep"></div>
-        <button class="bar-btn" id="btn-setup" onclick="togglePanel('setupPanel', 'btn-setup')">Setup</button>
-        <button class="bar-btn" id="btn-tambah" onclick="togglePanel('tambahPanel', 'btn-tambah')">Tambah</button>
-        <div class="bar-sep"></div>
-        <button class="bar-btn" onclick="toggleFullscreen()">Fullscreen</button>
-        <div class="bar-sep"></div>
-        <button class="bar-btn tpick" data-theme="dark" onclick="setTheme('dark')">Dark</button>
-        <button class="bar-btn tpick" data-theme="light" onclick="setTheme('light')">Light</button>
-        <button class="bar-btn tpick" data-theme="miku" onclick="setTheme('miku')">Miku</button>
-    </div>
+    <main id="main-content">
+        <button id="btn-fullscreen-main" class="btn-fullscreen" onclick="toggleFullscreen()" title="Fullscreen">
+            <svg id="icon-fs-expand" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            <svg id="icon-fs-shrink" viewBox="0 0 24 24" style="display:none;"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+        </button>
+
+        <header class="main-header">
+            <h2>"Don't count the days, make the days count."</h2>
+            <div id="header-stats">
+                Total: <span id="stat-total">0</span> &bull; Progress: <span id="stat-lived">0</span> &bull; Remaining: <span id="stat-rem">0</span>
+            </div>
+        </header>
+
+        <div class="calendar-container">
+            <div class="grid-scroll-wrapper">
+                <div class="grid" id="calendarGrid"></div>
+            </div>
+        </div>
+    </main>
 
     <div id="tooltip"></div>
+
+    <!-- Floating dot menu for Other Calendars items -->
+    <div id="dot-menu" class="dot-menu">
+        <button class="dot-menu-item" onclick="dotMenuEdit()">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit
+        </button>
+        <button class="dot-menu-item danger" onclick="dotMenuDelete()">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Delete
+        </button>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:4000; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+        <div id="confirm-box" style="background:var(--card); border:1px solid var(--border-light); border-radius:14px; padding:24px 28px; width:280px; box-shadow:0 16px 48px rgba(0,0,0,0.5); display:flex; flex-direction:column; gap:12px;">
+            <div style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; color:var(--text);">Hapus item ini?</div>
+            <div id="confirm-desc" style="font-size:0.82rem; color:var(--text-mid); line-height:1.5;"></div>
+            <div style="display:flex; gap:8px; margin-top:4px;">
+                <button onclick="confirmCancel()" style="flex:1; padding:9px; border-radius:7px; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:'Inter',sans-serif; font-size:0.82rem; cursor:pointer; font-weight:500; transition:background 0.2s;" onmouseover="this.style.background='var(--card)'" onmouseout="this.style.background='var(--surface)'">Batal</button>
+                <button onclick="confirmDelete()" style="flex:1; padding:9px; border-radius:7px; background:#c0392b; border:none; color:#fff; font-family:'Inter',sans-serif; font-size:0.82rem; cursor:pointer; font-weight:600; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Hapus</button>
+            </div>
+        </div>
+    </div>
 
 <script>
     // --- STATE ---
     const defaultData = {
         dob: '2006-06-07',
+        targetAge: 90,
         items: [
-            { id: 1, type: 'phase', name: 'Masa Sekolah', start: 6, end: 18, color: '#7c5cfc' },
-            { id: 2, type: 'event', name: 'Lahir', age: 0, week: 1, color: '#ffffff' }
+            { id: 1, type: 'phase', name: 'School Years', start: 6, end: 18, color: '#7c5cfc' },
+            { id: 2, type: 'event', name: 'Birth', age: 0, week: 1, color: '#ffffff' }
         ]
     };
 
-    let appData = JSON.parse(localStorage.getItem('myLifeCalendar_v2')) || defaultData;
+    let appData = JSON.parse(localStorage.getItem('myLifeCalendar_v4')) || defaultData;
+    appData.targetAge = appData.targetAge || 90; 
+
     let hiddenIds = new Set();
     let editId = null;
     let currentMode = 'phase';
-    let activePanel = null;
-    let activeBtnId = null;
 
     // --- INIT ---
     function init() {
@@ -396,67 +435,161 @@
             appData.dob = e.target.value;
             save(); render();
         };
+
+        document.getElementById('targetAgeInput').value = appData.targetAge;
+        document.getElementById('targetAgeInput').onchange = (e) => {
+            appData.targetAge = parseInt(e.target.value) || 90;
+            save(); render();
+        };
+
         setTheme(appData.theme || 'dark');
         document.addEventListener('mousemove', updateTooltipPos);
         render();
     }
 
-    // --- CORE LOGIC ---
-    function getStats() {
-        const dob = new Date(appData.dob);
-        const diff = new Date() - dob;
-        const lived = Math.floor(diff / (1000 * 60 * 60 * 24 * 7));
-        return { lived, total: 90 * 52, rem: (90 * 52) - lived };
+    // --- SIDEBAR ACCORDION TOGGLE ---
+    function toggleSidebar(forceOpen) {
+        if(forceOpen) document.body.classList.add('sidebar-open');
+        else document.body.classList.toggle('sidebar-open');
     }
 
+    function toggleAccordion(id) {
+        document.getElementById(id).classList.toggle('open');
+    }
+
+    function openAddEvent(e) {
+        if(e) e.stopPropagation();
+        toggleSidebar(true); // Pastikan sidebar terbuka lebar
+        const formAcc = document.getElementById('acc-form');
+        if(!formAcc.classList.contains('open')) {
+            formAcc.classList.add('open');
+        }
+        cancelEdit(); // Reset form untuk isian baru
+        document.getElementById('phaseName').focus();
+    }
+
+    // --- SETTINGS POPOVER ---
+    function toggleSettings(e) {
+        if(e) e.stopPropagation();
+        const popover = document.getElementById('settings-popover');
+        popover.classList.toggle('open');
+    }
+
+    document.addEventListener('click', (e) => {
+        const popover = document.getElementById('settings-popover');
+        const btn = document.getElementById('btn-settings');
+        if (popover && btn && !popover.contains(e.target) && !btn.contains(e.target)) {
+            popover.classList.remove('open');
+        }
+        // Close dot menu
+        const dotMenu = document.getElementById('dot-menu');
+        if (dotMenu && !dotMenu.contains(e.target)) {
+            closeDotMenu();
+        }
+    });
+
+    // --- FULLSCREEN LOGIC ---
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+        const isFS = document.fullscreenElement !== null;
+        document.getElementById('icon-fs-expand').style.display = isFS ? 'none' : 'block';
+        document.getElementById('icon-fs-shrink').style.display = isFS ? 'block' : 'none';
+    });
+
+    // --- CORE LOGIC ---
     function render() {
         const grid = document.getElementById('calendarGrid');
         grid.innerHTML = '';
-        const stats = getStats();
-        document.getElementById('stat-lived').innerText = stats.lived.toLocaleString();
-        document.getElementById('stat-rem').innerText = stats.rem.toLocaleString();
+        
+        const dobDate = new Date(appData.dob);
+        const birthYear = dobDate.getFullYear();
+        const today = new Date();
+        const totalCount = appData.targetAge * 52;
+        let livedCount = 0;
 
         grid.appendChild(createDiv('axis-label', ''));
         for (let w = 1; w <= 52; w++)
             grid.appendChild(createDiv('axis-label', w % 5 === 0 || w === 1 ? w : ''));
 
-        let currentTotalWeek = 1;
-        for (let y = 0; y < 90; y++) {
-            grid.appendChild(createDiv('axis-label y-label', y % 10 === 0 ? y : ''));
+        for (let y = 0; y < appData.targetAge; y++) {
+            // Y-label: show year every 5 ages with a dashed connector line
+            const yl = document.createElement('div');
+            yl.className = 'axis-label y-label';
+            if (y % 5 === 0) {
+                yl.innerHTML = `<div class="y-label-inner"><span class="y-year">${birthYear + y}</span><span class="y-dash"></span></div>`;
+            }
+            grid.appendChild(yl);
+            
+            const ageYearStart = new Date(dobDate.getFullYear() + y, dobDate.getMonth(), dobDate.getDate());
+
             for (let w = 1; w <= 52; w++) {
                 const box = document.createElement('div');
                 box.className = 'week-box';
-                const isLived = currentTotalWeek <= stats.lived;
-                const isCurrent = currentTotalWeek === stats.lived;
-                if (isLived) box.classList.add('lived');
+
+                const weekStart = new Date(ageYearStart.getTime() + (w - 1) * 7 * 24 * 60 * 60 * 1000);
+                const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+                const isLived = weekStart <= today;
+                const isCurrent = today >= weekStart && today <= weekEnd;
+
+                if (isLived) {
+                    box.classList.add('lived');
+                    livedCount++;
+                }
                 if (isCurrent) box.classList.add('current');
 
+                const dateOpts = { month: 'short', day: 'numeric', year: 'numeric' };
+                const dateRange = `${weekStart.toLocaleDateString('en-US', dateOpts)} - ${weekEnd.toLocaleDateString('en-US', dateOpts)}`;
+
                 let bgColor = '';
-                let tooltipContent = `Umur ${y}, Minggu ${w}`;
+                let tooltipContent = `
+                    <div style="margin-bottom:4px;"><b>Age ${y}, Week ${w}</b></div>
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px;">📅 ${dateRange}</div>
+                `;
 
                 const activePhase = appData.items.find(i =>
                     i.type === 'phase' && y >= i.start && y <= i.end && !hiddenIds.has(i.id));
                 if (activePhase) {
                     bgColor = activePhase.color;
-                    tooltipContent += `<br><span style="color:${bgColor}">✦ ${activePhase.name}</span>`;
+                    tooltipContent += `<div style="color:${bgColor}; font-weight:500;">✦ ${activePhase.name}</div>`;
                 }
 
                 const activeEvent = appData.items.find(i =>
                     i.type === 'event' && i.age == y && i.week == w && !hiddenIds.has(i.id));
                 if (activeEvent) {
-                    box.innerHTML = '<div class="marker"></div>';
-                    tooltipContent += `<br>📍 <b>${activeEvent.name}</b>`;
+                    // Color the entire box with the event color
+                    bgColor = activeEvent.color;
+                    box.style.borderColor = activeEvent.color;
+                    box.style.boxShadow = `0 0 6px ${activeEvent.color}66`;
+                    tooltipContent += `<div style="margin-top:2px; color:${activeEvent.color}; font-weight:600;">📍 ${activeEvent.name}</div>`;
+                    if (activeEvent.date) {
+                        tooltipContent += `<div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">🗓 ${new Date(activeEvent.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>`;
+                    }
                 }
 
                 if (bgColor) box.style.backgroundColor = bgColor;
                 box.onmouseenter = (e) => showTooltip(e, tooltipContent);
                 box.onmouseleave = hideTooltip;
                 grid.appendChild(box);
-                currentTotalWeek++;
             }
         }
-        renderDataList();
-        renderFilters();
+
+        const remCount = totalCount - livedCount;
+        const livedYrs = (livedCount / 52).toFixed(1);
+        const remYrs = (remCount / 52).toFixed(1);
+
+        document.getElementById('stat-total').innerText = `${totalCount.toLocaleString()} wks`;
+        document.getElementById('stat-lived').innerText = `${livedCount.toLocaleString()} (~${livedYrs} yrs)`;
+        document.getElementById('stat-rem').innerText = `${remCount.toLocaleString()} (~${remYrs} yrs)`;
+
+        renderSidebarViewList();
     }
 
     function createDiv(cls, txt) {
@@ -464,24 +597,115 @@
         d.className = cls; d.innerText = txt; return d;
     }
 
-    // --- PANELS ---
-    function togglePanel(panelId, btnId) {
-        const isSame = activePanel === panelId;
-        closeAllPanels();
-        if (!isSame) {
-            document.getElementById(panelId).classList.add('open');
-            document.getElementById('backdrop').classList.add('open');
-            if (btnId) document.getElementById(btnId).classList.add('active');
-            activePanel = panelId;
-            activeBtnId = btnId;
+    // --- ITEM TIME LABEL HELPER ---
+    function getItemTimeLabel(item) {
+        const dob = new Date(appData.dob + 'T12:00:00');
+        const monthFmt = { month: 'short', year: 'numeric' };
+        const dayFmt   = { day: 'numeric', month: 'short', year: 'numeric' };
+
+        if (item.type === 'phase') {
+            const startDate = new Date(dob.getFullYear() + item.start, dob.getMonth(), dob.getDate());
+            const endDate   = new Date(dob.getFullYear() + item.end,   dob.getMonth(), dob.getDate());
+            return `${startDate.toLocaleDateString('en-US', monthFmt)} – ${endDate.toLocaleDateString('en-US', monthFmt)}`;
+        } else {
+            if (item.date) {
+                return new Date(item.date + 'T12:00:00').toLocaleDateString('en-US', dayFmt);
+            }
+            // fallback: reconstruct from age + week
+            const ageStart  = new Date(dob.getFullYear() + item.age, dob.getMonth(), dob.getDate());
+            const eventDate = new Date(ageStart.getTime() + (item.week - 1) * 7 * 24 * 60 * 60 * 1000);
+            return eventDate.toLocaleDateString('en-US', dayFmt);
         }
     }
 
-    function closeAllPanels() {
-        document.querySelectorAll('.slide-panel').forEach(p => p.classList.remove('open'));
-        document.getElementById('backdrop').classList.remove('open');
-        document.querySelectorAll('.bar-btn').forEach(b => b.classList.remove('active'));
-        activePanel = null; activeBtnId = null;
+    // --- SIDEBAR LIST RENDER (View Section) ---
+    function renderSidebarViewList() {
+        const list = document.getElementById('viewListContainer');
+        list.innerHTML = '';
+        appData.items.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'list-item';
+            const isHidden = hiddenIds.has(item.id);
+            const timeLabel = getItemTimeLabel(item);
+            
+            el.innerHTML = `
+                <label class="event-checkbox-wrapper">
+                    <input type="checkbox" class="event-checkbox-input" ${!isHidden ? 'checked' : ''} onchange="toggleFilter(${item.id})">
+                    <div class="event-checkbox-box" style="--box-color: ${item.color}">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <div class="event-text">
+                        <span class="event-label">${item.name}</span>
+                        <span class="event-time-label">${timeLabel}</span>
+                    </div>
+                </label>
+                <button class="dot-btn" onclick="openDotMenu(event, ${item.id})" title="Options">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                </button>
+            `;
+            list.appendChild(el);
+        });
+    }
+
+    // --- DOT MENU LOGIC ---
+    let activeDotMenuId = null;
+
+    function openDotMenu(e, id) {
+        e.stopPropagation();
+        const menu = document.getElementById('dot-menu');
+        const rect = e.currentTarget.getBoundingClientRect();
+        activeDotMenuId = id;
+        // Position: left-align below the button, shift left so it doesn't overflow
+        const menuW = 130;
+        let left = rect.right - menuW;
+        let top = rect.bottom + 4;
+        if (left < 8) left = 8;
+        menu.style.left = left + 'px';
+        menu.style.top = top + 'px';
+        menu.classList.add('open');
+    }
+
+    function closeDotMenu() {
+        document.getElementById('dot-menu').classList.remove('open');
+        activeDotMenuId = null;
+    }
+
+    function dotMenuEdit() {
+        const id = activeDotMenuId;
+        closeDotMenu();
+        if (id) editItem(id);
+    }
+
+    function dotMenuDelete() {
+        const id = activeDotMenuId;
+        closeDotMenu();
+        if (!id) return;
+        const item = appData.items.find(i => i.id === id);
+        if (!item) return;
+        pendingDeleteId = id;
+        document.getElementById('confirm-desc').innerText = `"${item.name}" akan dihapus secara permanen dari kalender.`;
+        const overlay = document.getElementById('confirm-overlay');
+        overlay.style.display = 'flex';
+    }
+
+    let pendingDeleteId = null;
+
+    function confirmDelete() {
+        if (!pendingDeleteId) return;
+        appData.items = appData.items.filter(i => i.id !== pendingDeleteId);
+        save(); render();
+        pendingDeleteId = null;
+        document.getElementById('confirm-overlay').style.display = 'none';
+    }
+
+    function confirmCancel() {
+        pendingDeleteId = null;
+        document.getElementById('confirm-overlay').style.display = 'none';
+    }
+
+    function toggleFilter(id) {
+        if (hiddenIds.has(id)) hiddenIds.delete(id); else hiddenIds.add(id);
+        render(); 
     }
 
     // --- FORM LOGIC ---
@@ -493,17 +717,16 @@
     function addEventMode() {
         currentMode = 'event';
         document.getElementById('modeSelect').value = 'event';
-        document.getElementById('phaseStart').placeholder = "Umur";
-        document.getElementById('phaseEnd').placeholder = "Minggu ke-";
-        document.getElementById('btnSubmitPhase').innerText = "Simpan Event";
+        document.getElementById('field-ages').style.display = 'none';
+        document.getElementById('field-date').style.display = 'flex';
+        document.getElementById('row-label') && (document.getElementById('row-label').innerText = 'Date');
     }
 
     function addPhaseMode() {
         currentMode = 'phase';
         document.getElementById('modeSelect').value = 'phase';
-        document.getElementById('phaseStart').placeholder = "Umur Mulai";
-        document.getElementById('phaseEnd').placeholder = "Umur Selesai";
-        document.getElementById('btnSubmitPhase').innerText = "Simpan Fase";
+        document.getElementById('field-ages').style.display = 'flex';
+        document.getElementById('field-date').style.display = 'none';
     }
 
     function cancelEdit() {
@@ -512,86 +735,88 @@
         document.getElementById('phaseName').value = '';
         document.getElementById('phaseStart').value = '';
         document.getElementById('phaseEnd').value = '';
+        document.getElementById('eventDate').value = '';
         document.getElementById('btnCancelEdit').style.display = 'none';
+        document.getElementById('form-acc-title').innerText = "Add New Event";
+        document.getElementById('btnSubmitPhase').innerText = "Save Data";
+    }
+
+    // --- DATE ↔ AGE/WEEK HELPERS ---
+    function getAgeWeekFromDate(dateStr) {
+        const date = new Date(dateStr + 'T12:00:00');
+        const dob = new Date(appData.dob + 'T12:00:00');
+        let age = date.getFullYear() - dob.getFullYear();
+        const ageYearStart = new Date(dob.getFullYear() + age, dob.getMonth(), dob.getDate());
+        if (date < ageYearStart) age--;
+        const ageStart = new Date(dob.getFullYear() + age, dob.getMonth(), dob.getDate());
+        const week = Math.min(Math.floor((date - ageStart) / (7 * 24 * 60 * 60 * 1000)) + 1, 52);
+        return { age: Math.max(age, 0), week: Math.max(week, 1) };
+    }
+
+    function getDateFromAgeWeek(age, week) {
+        const dob = new Date(appData.dob + 'T12:00:00');
+        const ageStart = new Date(dob.getFullYear() + age, dob.getMonth(), dob.getDate());
+        const d = new Date(ageStart.getTime() + (week - 1) * 7 * 24 * 60 * 60 * 1000);
+        return d.toISOString().split('T')[0];
     }
 
     function submitPhase() {
-        const name = document.getElementById('phaseName').value;
-        const val1 = parseInt(document.getElementById('phaseStart').value);
-        const val2 = parseInt(document.getElementById('phaseEnd').value);
+        const name = document.getElementById('phaseName').value.trim();
         const color = document.getElementById('phaseColor').value;
-        if (!name || isNaN(val1)) return;
+        if (!name) return;
 
-        const newItem = { id: editId || Date.now(), type: currentMode, name, color };
-        if (currentMode === 'phase') { newItem.start = val1; newItem.end = val2; }
-        else { newItem.age = val1; newItem.week = val2; }
+        let newItem;
+        if (currentMode === 'phase') {
+            const val1 = parseInt(document.getElementById('phaseStart').value);
+            const val2 = parseInt(document.getElementById('phaseEnd').value) || val1;
+            if (isNaN(val1)) return;
+            newItem = { id: editId || Date.now(), type: 'phase', name, color, start: val1, end: val2 };
+        } else {
+            const dateStr = document.getElementById('eventDate').value;
+            if (!dateStr) return;
+            const { age, week } = getAgeWeekFromDate(dateStr);
+            newItem = { id: editId || Date.now(), type: 'event', name, color, age, week, date: dateStr };
+        }
 
         if (editId) {
             const idx = appData.items.findIndex(i => i.id === editId);
             appData.items[idx] = newItem;
         } else { appData.items.push(newItem); }
 
-        save(); cancelEdit(); render();
+        save(); cancelEdit(); render(); 
     }
 
     function editItem(id) {
+        toggleSidebar(true);
         const item = appData.items.find(i => i.id === id);
         editId = id; currentMode = item.type;
+        
         document.getElementById('phaseName').value = item.name;
         document.getElementById('phaseColor').value = item.color;
-        document.getElementById('btnCancelEdit').style.display = 'inline-block';
-        document.getElementById('btnSubmitPhase').innerText = "Update Data";
-
+        document.getElementById('btnCancelEdit').style.display = 'flex';
+        
         if (item.type === 'phase') {
             addPhaseMode();
             document.getElementById('phaseStart').value = item.start;
             document.getElementById('phaseEnd').value = item.end;
         } else {
             addEventMode();
-            document.getElementById('phaseStart').value = item.age;
-            document.getElementById('phaseEnd').value = item.week;
+            // Populate date: use stored date if available, otherwise reconstruct from age/week
+            const dateStr = item.date || getDateFromAgeWeek(item.age, item.week);
+            document.getElementById('eventDate').value = dateStr;
         }
+        
+        document.getElementById('form-acc-title').innerText = "Edit Data";
         document.getElementById('btnSubmitPhase').innerText = "Update Data";
-        // Open tambah panel if not open
-        if (activePanel !== 'tambahPanel') togglePanel('tambahPanel', 'btn-tambah');
+        
+        const formAcc = document.getElementById('acc-form');
+        if(!formAcc.classList.contains('open')) formAcc.classList.add('open');
     }
 
-    function deleteItem(id) {
-        appData.items = appData.items.filter(i => i.id !== id);
-        save(); render();
-    }
-
-    function toggleFilter(id) {
-        if (hiddenIds.has(id)) hiddenIds.delete(id); else hiddenIds.add(id);
-        render();
-    }
-
-    function renderDataList() {
-        const list = document.getElementById('dataList');
-        list.innerHTML = '';
-        appData.items.forEach(item => {
-            const el = document.createElement('div');
-            el.className = 'data-item';
-            el.innerHTML = `
-                <span><i style="color:${item.color}">●</i> ${item.name}</span>
-                <div class="actions">
-                    <button onclick="editItem(${item.id})">✎</button>
-                    <button onclick="deleteItem(${item.id})">✕</button>
-                </div>`;
-            list.appendChild(el);
-        });
-    }
-
-    function renderFilters() {
-        const list = document.getElementById('filterList');
-        list.innerHTML = '';
-        appData.items.forEach(item => {
-            const label = document.createElement('label');
-            label.className = 'filter-item';
-            const checked = hiddenIds.has(item.id) ? '' : 'checked';
-            label.innerHTML = `<input type="checkbox" ${checked} onchange="toggleFilter(${item.id})"><span>${item.name}</span>`;
-            list.appendChild(label);
-        });
+    function deleteItemAction() {
+        if(!editId) return;
+        appData.items = appData.items.filter(i => i.id !== editId);
+        save(); cancelEdit(); render(); 
     }
 
     // --- UI HELPERS ---
@@ -612,17 +837,13 @@
     function setTheme(t) {
         document.body.setAttribute('data-theme', t);
         appData.theme = t; save();
-        document.querySelectorAll('.tpick').forEach(b => {
+        
+        document.querySelectorAll('.theme-btn').forEach(b => {
             b.classList.toggle('active', b.getAttribute('data-theme') === t);
         });
     }
-
-    function save() { localStorage.setItem('myLifeCalendar_v2', JSON.stringify(appData)); }
-
-    function toggleFullscreen() {
-        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-        else document.exitFullscreen();
-    }
+    
+    function save() { localStorage.setItem('myLifeCalendar_v4', JSON.stringify(appData)); }
 
     init();
 </script>
