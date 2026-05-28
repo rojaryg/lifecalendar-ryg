@@ -1,0 +1,18 @@
+{
+  "startDate": "2026-01-01",
+  "duration": 11,
+  "theme": "dark",
+  "items": [
+    {
+      "id": 1779932384712,
+      "type": "phase",
+      "name": "Libur",
+      "color": "#28b010",
+      "startDate": "2026-06-28",
+      "endDate": "2026-08-18"
+    }
+  ],
+  "customOrder": [
+    1779932384712
+  ]
+}
