@@ -36,6 +36,15 @@
       "endDate": "2026-07-20",
       "start": 20,
       "end": 20
+    },
+    {
+      "id": 1779938033396,
+      "type": "event",
+      "name": "21 yrs",
+      "color": "#00ffc4",
+      "age": 21,
+      "week": 1,
+      "date": "2027-06-07"
     }
   ],
   "theme": "dark"
