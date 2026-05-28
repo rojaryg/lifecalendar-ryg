@@ -17,6 +17,15 @@
       "age": 0,
       "week": 1,
       "color": "#ffffff"
+    },
+    {
+      "id": 1779934637784,
+      "type": "event",
+      "name": "20 yrs",
+      "color": "#ff0000",
+      "age": 20,
+      "week": 1,
+      "date": "2026-06-07"
     }
   ],
   "theme": "dark"
