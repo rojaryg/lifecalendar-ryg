@@ -1,0 +1,23 @@
+{
+  "dob": "2006-06-07",
+  "targetAge": 90,
+  "items": [
+    {
+      "id": 1,
+      "type": "phase",
+      "name": "School Years",
+      "start": 6,
+      "end": 18,
+      "color": "#7c5cfc"
+    },
+    {
+      "id": 2,
+      "type": "event",
+      "name": "Birth",
+      "age": 0,
+      "week": 1,
+      "color": "#ffffff"
+    }
+  ],
+  "theme": "dark"
+}
