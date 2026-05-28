@@ -23,7 +23,7 @@
             
             /* Sidebar Variables */
             --sidebar-collapsed: 48px;
-            --sidebar-expanded: 280px; /* Diperlebar sedikit agar form muat rapi */
+            --sidebar-expanded: 280px;
         }
         body[data-theme="light"] {
             --bg: #e2e0dc; --surface: #eceae6; --card: #ffffff;
@@ -40,7 +40,6 @@
             --lived: #BCE8E4;
         }
 
-        /* ── HIDE SCROLLBARS GLOBALLY ── */
         * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; -ms-overflow-style: none; }
         *::-webkit-scrollbar { display: none; }
 
@@ -50,7 +49,6 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* ── LEFT SIDEBAR ── */
         #left-sidebar {
             width: var(--sidebar-collapsed); background: var(--surface); border-right: 1px solid var(--border);
             display: flex; flex-direction: column; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-color 0.3s ease;
@@ -78,14 +76,12 @@
         }
         body.sidebar-open .sidebar-title { opacity: 1; pointer-events: auto; }
 
-        /* ── SIDEBAR SCROLL CONTENT ── */
         .sidebar-content-scroll {
             flex: 1; overflow-y: auto; display: flex; flex-direction: column;
             opacity: 0; pointer-events: none; transition: opacity 0.2s;
         }
         body.sidebar-open .sidebar-content-scroll { opacity: 1; pointer-events: auto; }
 
-        /* ── ACCORDION (SECTION) ── */
         .accordion { border-bottom: 1px solid var(--border); transition: border-color 0.3s; }
         .accordion-header {
             display: flex; justify-content: space-between; align-items: center;
@@ -110,7 +106,6 @@
         .chevron { transition: transform 0.2s; }
         .accordion.open .chevron { transform: rotate(180deg); }
 
-        /* ── SIDEBAR FORM ELEMENTS ── */
         .sidebar-input {
             width: 100%; padding: 8px 10px; background: var(--card); border: 1px solid var(--border);
             border-radius: 6px; color: var(--text); font-family: 'Inter', sans-serif;
@@ -127,7 +122,6 @@
         .btn-danger { color: var(--danger); border-color: var(--danger); }
         .btn-danger:hover { background: rgba(224, 82, 82, 0.1); border-color: var(--danger); }
 
-        /* ── CHECKBOX LIST (VIEW SECTION) ── */
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-radius: 6px; transition: background 0.2s; margin-bottom: 2px; }
         .list-item:hover { background: rgba(255,255,255,0.03); }
         
@@ -157,7 +151,6 @@
         .list-item:hover .dot-btn { opacity: 1; }
         .dot-btn:hover { color: var(--text); background: var(--border-light); }
 
-        /* ── MOVE UP/DOWN ARROWS ── */
         .move-btns {
             display: flex; flex-direction: column; gap: 1px; margin-right: 2px; flex-shrink: 0;
         }
@@ -170,14 +163,12 @@
         .move-btn:hover { color: var(--text); background: var(--border-light); opacity: 1 !important; }
         .move-btn svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* ── DRAG AND DROP ── */
         .list-item[draggable="true"] { cursor: grab; }
         .list-item[draggable="true"]:active { cursor: grabbing; }
         .list-item.drag-over-top { border-top: 2px solid var(--accent); margin-top: -2px; }
         .list-item.drag-over-bottom { border-bottom: 2px solid var(--accent); }
         .list-item.dragging { opacity: 0.35; }
 
-        /* ── BOTTOM SETTINGS BUTTON ── */
         .sidebar-bottom { padding: 8px 8px 20px; flex-shrink: 0; display: none; }
         body.sidebar-open .sidebar-bottom { display: block; padding: 8px 12px 20px; }
         .sidebar-bottom-row { display: grid; grid-template-columns: 1fr auto; gap: 4px; }
@@ -198,10 +189,8 @@
         .sidebar-icon-btn:hover { background: var(--card); color: var(--text); }
         .sidebar-icon-btn svg { width: 17px; height: 17px; fill: currentColor; }
 
-        /* ── MAIN CONTENT AREA ── */
         #main-content { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; min-width: 0; }
 
-        /* Fullscreen Button in Main Area */
         .btn-fullscreen {
             position: absolute; top: 24px; right: 24px; z-index: 100;
             background: transparent; border: 1px solid transparent; color: var(--text-muted);
@@ -212,13 +201,11 @@
         .btn-fullscreen:hover { background: var(--surface); border-color: var(--border); color: var(--text); }
         .btn-fullscreen svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* ── HEADER ── */
         .main-header { padding: 36px 40px 16px; text-align: center; flex-shrink: 0; }
         .main-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 400; font-style: italic; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 12px; color: var(--text); }
         #header-stats { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0.01em; }
         #header-stats span { color: var(--text); font-weight: 500; }
 
-        /* ── CALENDAR ── */
         .calendar-container { flex: 1; padding: 24px 40px 40px; overflow: auto; display: flex; justify-content: center; }
         .grid-scroll-wrapper { position: relative; padding-bottom: 120px; margin-left: -24px; transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         body.sidebar-open .grid-scroll-wrapper { margin-left: 0; }
@@ -236,7 +223,6 @@
         .week-box.current { border: 2px solid var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
         .marker { width: 5px; height: 5px; background: var(--bg); border-radius: 50%; margin: 3px auto; }
 
-        /* ── SETTINGS PANEL (INLINE IN SIDEBAR) ── */
         #settings-panel {
             flex: 1; display: none; flex-direction: column; overflow-y: auto;
         }
@@ -274,14 +260,12 @@
         .theme-btn:hover { background: var(--surface); color: var(--text); }
         .theme-btn.active { background: transparent; color: var(--text); border-color: var(--text); }
 
-        /* ── FORM LABELS ── */
         .form-label {
             font-size: 0.72rem; color: var(--text-muted); display: block;
             margin-bottom: 5px; font-weight: 500; letter-spacing: 0.01em;
         }
         .form-field { display: flex; flex-direction: column; }
 
-        /* ── DOT DROPDOWN MENU ── */
         .dot-menu {
             position: fixed; background: var(--card); border: 1px solid var(--border-light);
             border-radius: 8px; padding: 4px; z-index: 3000;
@@ -299,10 +283,8 @@
         .dot-menu-item.danger { color: #e05252; }
         .dot-menu-item.danger:hover { background: rgba(224,82,82,0.1); }
 
-        /* ── TOOLTIP ── */
         #tooltip { position: fixed; background: var(--surface); border: 1px solid var(--border-light); color: var(--text); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.8rem; pointer-events: none; opacity: 0; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: opacity 0.2s; line-height: 1.4; }
 
-        /* ── ARRANGE DROPDOWN ── */
         .arrange-menu {
             position: fixed; background: var(--card); border: 1px solid var(--border-light);
             border-radius: 8px; padding: 4px; z-index: 3000;
@@ -375,7 +357,6 @@
                         <input type="text" id="phaseName" class="sidebar-input" placeholder="e.g., Childhood, Career...">
                     </div>
 
-                    <!-- Phase mode: start/end date -->
                     <div class="form-field" id="field-ages" style="gap:8px;">
                         <div class="form-field">
                             <span class="form-label">Start Date</span>
@@ -387,13 +368,11 @@
                         </div>
                     </div>
 
-                    <!-- Event mode: date picker -->
                     <div class="form-field" id="field-date" style="display:none;">
                         <span class="form-label">Date</span>
                         <input type="date" id="eventDate" class="sidebar-input">
                     </div>
 
-                    <!-- Color always visible -->
                     <div class="form-field">
                         <span class="form-label">Color</span>
                         <input type="color" id="phaseColor" class="sidebar-input" value="#efefef" style="padding: 2px; cursor: pointer; height: 34px; width: 100%;">
@@ -429,7 +408,6 @@
 
         </div>
 
-        <!-- ── SETTINGS PANEL ── -->
         <div id="settings-panel">
             <div class="settings-panel-header">
                 <button class="settings-back-btn" onclick="closeSettings()" title="Back">
@@ -438,7 +416,6 @@
                 <span class="settings-panel-title">Settings</span>
             </div>
 
-            <!-- Configuration -->
             <div class="settings-section">
                 <div class="settings-section-label">Configuration</div>
                 <div class="form-field">
@@ -451,7 +428,6 @@
                 </div>
             </div>
 
-            <!-- Theme -->
             <div class="settings-section">
                 <div class="settings-section-label">Theme</div>
                 <div class="theme-switcher">
@@ -461,7 +437,6 @@
                 </div>
             </div>
 
-            <!-- GitHub Sync -->
             <div class="settings-section">
                 <div class="settings-section-label" style="display:flex;align-items:center;gap:6px;">
                     <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -497,7 +472,6 @@
                 </div>
             </div>
 
-            <!-- Data -->
             <div class="settings-section">
                 <div class="settings-section-label">Data</div>
                 <div style="font-size:0.75rem; color:var(--text-muted); line-height:1.5; margin-bottom:4px;">
@@ -550,7 +524,6 @@
 
     <div id="tooltip"></div>
 
-    <!-- Floating dot menu for Other Calendars items -->
     <div id="dot-menu" class="dot-menu">
         <button class="dot-menu-item" onclick="dotMenuEdit()">
             <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -562,7 +535,6 @@
         </button>
     </div>
 
-    <!-- Arrange dropdown -->
     <div id="arrange-menu" class="arrange-menu">
         <div class="submenu-label">Arrange</div>
         <button class="arrange-item" id="arrange-sort-item"
@@ -585,7 +557,6 @@
         </button>
     </div>
 
-    <!-- Sort Submenu -->
     <div id="sort-submenu" class="arrange-submenu"
         onmouseenter="cancelSortSubmenuHide()"
         onmouseleave="hideSortSubmenuDelayed()">
@@ -621,7 +592,6 @@
         </button>
     </div>
 
-    <!-- Filter Submenu -->
     <div id="filter-submenu" class="arrange-submenu"
         onmouseenter="cancelFilterSubmenuHide()"
         onmouseleave="hideFilterSubmenuDelayed()">
@@ -640,7 +610,6 @@
         </button>
     </div>
 
-    <!-- Confirmation Modal -->
     <div id="confirm-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:4000; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
         <div id="confirm-box" style="background:var(--card); border:1px solid var(--border-light); border-radius:14px; padding:24px 28px; width:280px; box-shadow:0 16px 48px rgba(0,0,0,0.5); display:flex; flex-direction:column; gap:12px;">
             <div style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; color:var(--text);">Hapus item ini?</div>
@@ -652,7 +621,6 @@
         </div>
     </div>
 
-    <!-- Clear Cache Confirm Modal -->
     <div id="clear-cache-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:4000; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
         <div style="background:var(--card); border:1px solid var(--border-light); border-radius:14px; padding:24px 28px; width:290px; box-shadow:0 16px 48px rgba(0,0,0,0.5); display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; align-items:center; gap:10px;">
@@ -670,7 +638,6 @@
     </div>
 
 <script>
-    // --- STATE ---
     const defaultData = {
         dob: '2006-06-07',
         targetAge: 90,
@@ -687,7 +654,6 @@
     let editId = null;
     let currentMode = 'phase';
 
-    // --- INIT ---
     function init() {
         document.getElementById('dobInput').value = appData.dob;
         document.getElementById('dobInput').onchange = (e) => {
@@ -707,7 +673,6 @@
         render();
     }
 
-    // --- SIDEBAR ACCORDION TOGGLE ---
     function toggleSidebar(forceOpen) {
         if(forceOpen) document.body.classList.add('sidebar-open');
         else document.body.classList.toggle('sidebar-open');
@@ -719,16 +684,15 @@
 
     function openAddEvent(e) {
         if(e) e.stopPropagation();
-        toggleSidebar(true); // Pastikan sidebar terbuka lebar
+        toggleSidebar(true);
         const formAcc = document.getElementById('acc-form');
         if(!formAcc.classList.contains('open')) {
             formAcc.classList.add('open');
         }
-        cancelEdit(); // Reset form untuk isian baru
+        cancelEdit();
         document.getElementById('phaseName').focus();
     }
 
-    // --- SETTINGS PANEL ---
     function toggleSettings(e) {
         if(e) e.stopPropagation();
         const isOpen = document.body.classList.contains('settings-open');
@@ -760,7 +724,6 @@
         }
     });
 
-    // --- FULLSCREEN LOGIC ---
     function toggleFullscreen() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
@@ -775,7 +738,6 @@
         document.getElementById('icon-fs-shrink').style.display = isFS ? 'block' : 'none';
     });
 
-    // --- CORE LOGIC ---
     function render() {
         const grid = document.getElementById('calendarGrid');
         grid.innerHTML = '';
@@ -789,10 +751,9 @@
         grid.appendChild(createDiv('axis-label', ''));
         for (let w = 1; w <= 52; w++)
             grid.appendChild(createDiv('axis-label', w % 5 === 0 || w === 1 ? w : ''));
-        grid.appendChild(createDiv('axis-label', '')); // top-right empty cell
+        grid.appendChild(createDiv('axis-label', ''));
 
         for (let y = 0; y < appData.targetAge; y++) {
-            // Y-label: show year every 5 ages with a dashed connector line
             const yl = document.createElement('div');
             yl.className = 'axis-label y-label';
             if (y % 5 === 0) {
@@ -847,7 +808,6 @@
                     i.type === 'event' && i.age == y && i.week == w && !hiddenIds.has(i.id)
                     && (filterMode === 'all' || filterMode === 'events'));
                 if (activeEvent) {
-                    // Color the entire box with the event color
                     bgColor = activeEvent.color;
                     box.style.borderColor = activeEvent.color;
                     box.style.boxShadow = `0 0 6px ${activeEvent.color}66`;
@@ -863,7 +823,6 @@
                 grid.appendChild(box);
             }
 
-            // Right-side age label — every single age
             const ageLabel = document.createElement('div');
             ageLabel.className = 'y-age-label';
             ageLabel.textContent = y;
@@ -886,7 +845,6 @@
         d.className = cls; d.innerText = txt; return d;
     }
 
-    // --- ITEM TIME LABEL HELPER ---
     function getItemTimeLabel(item) {
         const dob = new Date(appData.dob + 'T12:00:00');
         const monthFmt = { month: 'short', year: 'numeric' };
@@ -911,13 +869,11 @@
         }
     }
 
-    // --- ARRANGE STATE ---
     let sortMode = 'none';
-    let filterMode = 'all'; // 'all' | 'events' | 'phases'
+    let filterMode = 'all';
     const sortLabels = { none: null, asc: '↑ shortest first', desc: '↓ longest first', earliest: '↑ earliest first', latest: '↓ latest first', custom: 'custom order' };
     const filterLabels = { all: null, events: 'events only', phases: 'phases only' };
 
-    // --- ARRANGE MENU ---
     let _sortHideTimer = null;
     let _filterHideTimer = null;
 
@@ -1053,9 +1009,7 @@
         }
     }
 
-    // --- CUSTOM ORDER HELPERS ---
     function initCustomOrder() {
-        // Snapshot current visual order (respect active sort for initial arrangement)
         let items = [...appData.items];
         if (sortMode === 'asc') items.sort((a, b) => getItemDuration(a) - getItemDuration(b));
         else if (sortMode === 'desc') items.sort((a, b) => getItemDuration(b) - getItemDuration(a));
@@ -1066,12 +1020,9 @@
     }
 
     function syncCustomOrder() {
-        // Ensure customOrder contains all current IDs (add new ones at end, remove deleted ones)
         if (!appData.customOrder) appData.customOrder = [];
         const existingIds = new Set(appData.items.map(i => i.id));
-        // Remove deleted
         appData.customOrder = appData.customOrder.filter(id => existingIds.has(id));
-        // Add new at end
         appData.items.forEach(item => {
             if (!appData.customOrder.includes(item.id)) appData.customOrder.push(item.id);
         });
@@ -1091,7 +1042,6 @@
         syncCustomOrder();
         const idx = appData.customOrder.indexOf(id);
         if (idx === -1) return;
-        // When filter is active, move among visible items only
         const list = document.getElementById('viewListContainer');
         const visibleIds = [...list.querySelectorAll('.list-item')].map(el => parseInt(el.dataset.id));
         const visIdx = visibleIds.indexOf(id);
@@ -1105,7 +1055,6 @@
         renderSidebarViewList();
     }
 
-    // --- DRAG AND DROP ---
     let _dragSrcId = null;
 
     function onDragStart(e, id) {
@@ -1153,12 +1102,10 @@
         renderSidebarViewList();
     }
 
-    // --- SIDEBAR LIST RENDER (View Section) ---
     function renderSidebarViewList() {
         const list = document.getElementById('viewListContainer');
         list.innerHTML = '';
 
-        // Arrange chip label
         const labelChip = document.getElementById('arrange-label-chip');
         const btn = document.getElementById('btn-arrange');
         const chipParts = [];
@@ -1173,12 +1120,10 @@
             if (btn) btn.style.color = '';
         }
 
-        // Filter by type
         let items = [...appData.items];
         if (filterMode === 'events') items = items.filter(i => i.type === 'event');
         else if (filterMode === 'phases') items = items.filter(i => i.type === 'phase');
 
-        // Sort
         if (sortMode === 'asc') {
             items.sort((a, b) => getItemDuration(a) - getItemDuration(b));
         } else if (sortMode === 'desc') {
@@ -1200,7 +1145,6 @@
             const isHidden = hiddenIds.has(item.id);
             const timeLabel = getItemTimeLabel(item);
 
-            // Move buttons (only in custom mode)
             const moveBtnsHtml = isCustom ? `
                 <div class="move-btns">
                     <button class="move-btn" title="Move up" onclick="moveItemInOrder(${item.id}, -1)">
@@ -1228,7 +1172,6 @@
                 </button>
             `;
 
-            // Drag and drop for custom mode
             if (isCustom) {
                 el.setAttribute('draggable', 'true');
                 el.addEventListener('dragstart', (e) => onDragStart(e, item.id));
@@ -1244,7 +1187,6 @@
         });
     }
 
-    // --- DOT MENU LOGIC ---
     let activeDotMenuId = null;
 
     function openDotMenu(e, id) {
@@ -1252,7 +1194,6 @@
         const menu = document.getElementById('dot-menu');
         const rect = e.currentTarget.getBoundingClientRect();
         activeDotMenuId = id;
-        // Position: left-align below the button, shift left so it doesn't overflow
         const menuW = 130;
         let left = rect.right - menuW;
         let top = rect.bottom + 4;
@@ -1305,7 +1246,6 @@
         render(); 
     }
 
-    // --- FORM LOGIC ---
     function onModeChange(val) {
         if (val === 'event') addEventMode();
         else addPhaseMode();
@@ -1338,7 +1278,6 @@
         document.getElementById('btnSubmitPhase').innerText = "Save Data";
     }
 
-    // --- DATE ↔ AGE/WEEK HELPERS ---
     function getAgeWeekFromDate(dateStr) {
         const date = new Date(dateStr + 'T12:00:00');
         const dob = new Date(appData.dob + 'T12:00:00');
@@ -1373,7 +1312,6 @@
             const startDateStr = document.getElementById('phaseStartDate').value;
             const endDateStr = document.getElementById('phaseEndDate').value;
             if (!startDateStr || !endDateStr) return;
-            // Compute age range from dates (for backward compat & sorting)
             const startAge = getAgeWeekFromDate(startDateStr).age;
             const endAge = getAgeWeekFromDate(endDateStr).age;
             newItem = { id: editId || Date.now(), type: 'phase', name, color,
@@ -1405,7 +1343,6 @@
         
         if (item.type === 'phase') {
             addPhaseMode();
-            // Use stored dates if available, else reconstruct from age
             document.getElementById('phaseStartDate').value = item.startDate || getDateFromAge(item.start);
             document.getElementById('phaseEndDate').value   = item.endDate   || getDateFromAge(item.end);
         } else {
@@ -1427,7 +1364,6 @@
         save(); cancelEdit(); render(); 
     }
 
-    // --- UI HELPERS ---
     function showTooltip(e, content) {
         const tip = document.getElementById('tooltip');
         tip.innerHTML = content; tip.style.opacity = '1';
@@ -1451,9 +1387,9 @@
         });
     }
     
-    // --- GITHUB SYNC ---
-    const GH_FILE = 'lifecalendar-data.json';
+    // --- GITHUB SYNC (DIPERBARUI) ---
     const GH_CREDS_KEY = 'myLifeCalendar_ghCreds';
+    // const GH_FILE = 'lifecalendar-data.json'; <--- BARIS INI DIHAPUS
 
     function ghLoadCreds() {
         try {
@@ -1494,12 +1430,16 @@
     async function githubSave() {
         const { username, repo, token } = ghGetCreds();
         if (!username || !repo || !token) { ghStatus('Fill in all fields.', 'error'); return; }
-        ghStatus('Saving to GitHub…');
+        
+        // --- BAGIAN INI DIMODIFIKASI ---
+        // Membuat nama file otomatis menyesuaikan dengan repo
+        const dynamicFileName = `${repo}.json`;
+        
+        ghStatus(`Saving ${dynamicFileName} to GitHub…`);
 
-        const url = `https://api.github.com/repos/${username}/${repo}/contents/${GH_FILE}`;
+        const url = `https://api.github.com/repos/${username}/${repo}/contents/${dynamicFileName}`;
         const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
 
-        // Fetch current SHA (needed to update existing file)
         let sha = null;
         try {
             const r = await fetch(url, { headers });
@@ -1523,9 +1463,14 @@
     async function githubLoad() {
         const { username, repo, token } = ghGetCreds();
         if (!username || !repo || !token) { ghStatus('Fill in all fields.', 'error'); return; }
-        ghStatus('Loading from GitHub…');
+        
+        // --- BAGIAN INI DIMODIFIKASI ---
+        // Membuat nama file otomatis menyesuaikan dengan repo
+        const dynamicFileName = `${repo}.json`;
+        
+        ghStatus(`Loading ${dynamicFileName} from GitHub…`);
 
-        const url = `https://api.github.com/repos/${username}/${repo}/contents/${GH_FILE}`;
+        const url = `https://api.github.com/repos/${username}/${repo}/contents/${dynamicFileName}`;
         const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' };
 
         try {
@@ -1544,7 +1489,6 @@
 
     function save() { localStorage.setItem('myLifeCalendar_v4', JSON.stringify(appData)); }
 
-    // --- CLEAR CACHE ---
     function showClearCacheConfirm() {
         document.getElementById('clear-cache-overlay').style.display = 'flex';
     }
@@ -1553,7 +1497,6 @@
         localStorage.removeItem('myLifeCalendar_v4');
         localStorage.removeItem('myLifeCalendar_ghCreds');
         document.getElementById('clear-cache-overlay').style.display = 'none';
-        // Reset state
         appData = JSON.parse(JSON.stringify(defaultData));
         hiddenIds = new Set();
         editId = null;
