@@ -3,49 +3,40 @@
   "targetAge": 90,
   "items": [
     {
-      "id": 1,
+      "id": 1780027586690,
       "type": "phase",
-      "name": "School Years",
-      "start": 6,
-      "end": 18,
-      "color": "#7c5cfc"
+      "name": "Kuliah S1 Bisnis Digital",
+      "color": "#ffdd00",
+      "startDate": "2025-08-18",
+      "endDate": "2029-07-02",
+      "start": 19,
+      "end": 23
     },
     {
-      "id": 2,
-      "type": "event",
-      "name": "Birth",
-      "age": 0,
-      "week": 1,
-      "color": "#ffffff"
-    },
-    {
-      "id": 1779934637784,
-      "type": "event",
-      "name": "20 yrs",
-      "color": "#ff0000",
-      "age": 20,
-      "week": 1,
-      "date": "2026-06-07"
-    },
-    {
-      "id": 1779936399183,
+      "id": 1780027736532,
       "type": "phase",
-      "name": "FIFA World Cup 2026",
-      "color": "#d1c000",
-      "startDate": "2026-06-12",
-      "endDate": "2026-07-20",
-      "start": 20,
-      "end": 20
+      "name": "Magang",
+      "color": "#ae00ff",
+      "startDate": "2027-08-16",
+      "endDate": "2027-12-20",
+      "start": 21,
+      "end": 21
     },
     {
-      "id": 1779938033396,
-      "type": "event",
-      "name": "21 yrs",
-      "color": "#00ffc4",
-      "age": 21,
-      "week": 1,
-      "date": "2027-06-07"
+      "id": 1780027895843,
+      "type": "phase",
+      "name": "Kerja as Data Analyst",
+      "color": "#00ff9d",
+      "startDate": "2028-08-21",
+      "endDate": "2056-01-01",
+      "start": 22,
+      "end": 49
     }
   ],
-  "theme": "dark"
+  "theme": "dark",
+  "customOrder": [
+    1780027736532,
+    1780027586690,
+    1780027895843
+  ]
 }
