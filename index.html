@@ -217,11 +217,19 @@
         .y-year { font-size: 0.58rem; color: var(--text-mid); flex-shrink: 0; letter-spacing: -0.01em; transition: color 0.3s; }
         .y-dash { flex: 1; height: 1px; border-top: 1px dashed var(--border-light); margin: 0 3px 0 4px; opacity: 0.6; }
         .y-age-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.55rem; color: var(--text-muted); display: flex; align-items: center; padding-left: 5px; letter-spacing: -0.02em; transition: color 0.3s; user-select: none; }
-        .week-box { width: 13px; height: 13px; border: 1px solid var(--border); border-radius: 2px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: crosshair; }
+        .week-box { width: 13px; height: 13px; border: 1px solid var(--border); border-radius: 2px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: crosshair; position: relative; }
         .week-box:hover { transform: scale(1.5); z-index: 10; border-color: var(--text); box-shadow: 0 0 15px rgba(0,0,0,0.2); }
         .week-box.lived { background-color: var(--lived); border-color: var(--lived); }
         .week-box.current { border: 2px solid var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
         .marker { width: 5px; height: 5px; background: var(--bg); border-radius: 50%; margin: 3px auto; }
+        .event-dots {
+            position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 1px; align-items: center; pointer-events: none;
+        }
+        .event-dot {
+            width: 3px; height: 3px; border-radius: 50%; flex-shrink: 0;
+            box-shadow: 0 0 0 0.5px rgba(0,0,0,0.4);
+        }
 
         #settings-panel {
             flex: 1; display: none; flex-direction: column; overflow-y: auto;
@@ -322,6 +330,25 @@
         .arrange-subitem .check-icon { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; opacity: 0; margin-left: auto; }
         .arrange-subitem.active .check-icon { opacity: 1; }
         .submenu-label { font-size: 0.62rem; color: var(--text-muted); padding: 6px 10px 3px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+        /* Priority selector */
+        .priority-selector { display: flex; gap: 5px; }
+        .priority-btn {
+            flex: 1; padding: 6px 4px; border-radius: 5px; border: 1px solid var(--border);
+            background: var(--card); color: var(--text-muted); font-family: 'Inter', sans-serif;
+            font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center;
+            transition: all 0.15s; letter-spacing: 0.01em;
+        }
+        .priority-btn:hover { border-color: var(--border-light); color: var(--text); }
+        .priority-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+        /* Priority badge in sidebar list */
+        .priority-badge {
+            font-size: 0.58rem; font-weight: 700; padding: 1px 4px; border-radius: 3px;
+            letter-spacing: 0.04em; flex-shrink: 0; margin-right: 2px;
+            background: color-mix(in srgb, var(--badge-color) 18%, transparent);
+            color: var(--badge-color); border: 1px solid color-mix(in srgb, var(--badge-color) 35%, transparent);
+        }
     </style>
 </head>
 <body data-theme="dark">
@@ -377,6 +404,16 @@
                         <span class="form-label">Color</span>
                         <input type="color" id="phaseColor" class="sidebar-input" value="#efefef" style="padding: 2px; cursor: pointer; height: 34px; width: 100%;">
                     </div>
+
+                    <div class="form-field" id="field-priority">
+                        <span class="form-label">Priority</span>
+                        <div class="priority-selector" id="prioritySelector">
+                            <button class="priority-btn" data-p="1" onclick="setPriority(1)" title="Highest priority">P1</button>
+                            <button class="priority-btn active" data-p="2" onclick="setPriority(2)" title="High priority">P2</button>
+                            <button class="priority-btn" data-p="3" onclick="setPriority(3)" title="Medium priority">P3</button>
+                            <button class="priority-btn" data-p="4" onclick="setPriority(4)" title="Low priority">P4</button>
+                        </div>
+                    </div>
                     
                     <div class="sidebar-form-actions">
                         <button class="btn-primary" id="btnSubmitPhase" onclick="submitPhase()">Save Data</button>
@@ -384,6 +421,44 @@
                             <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> 
                             Back
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion" id="acc-views">
+                <div class="accordion-header" onclick="toggleAccordion('acc-views')">
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <span class="acc-title">Views</span>
+                        <span id="view-active-chip" style="font-size:0.62rem; color:var(--text-muted); display:none;"></span>
+                    </div>
+                    <div class="acc-actions">
+                        <button class="acc-btn" id="btn-reset-view" onclick="resetView(event)" title="Reset view" style="display:none;">
+                            <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-4.5"></path></svg>
+                        </button>
+                        <button class="acc-btn chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="form-field">
+                        <span class="form-label">Mode</span>
+                        <div class="priority-selector">
+                            <button class="priority-btn active" id="view-mode-age" onclick="setViewMode('age')">Age</button>
+                            <button class="priority-btn" id="view-mode-year" onclick="setViewMode('year')">Year</button>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                        <div class="form-field">
+                            <span class="form-label" id="view-from-label">From (age)</span>
+                            <input type="number" id="view-from" class="sidebar-input" placeholder="0" min="0" onkeydown="if(event.key==='Enter')applyView()">
+                        </div>
+                        <div class="form-field">
+                            <span class="form-label" id="view-to-label">To (age)</span>
+                            <input type="number" id="view-to" class="sidebar-input" placeholder="90" min="0" onkeydown="if(event.key==='Enter')applyView()">
+                        </div>
+                    </div>
+                    <div class="sidebar-form-actions">
+                        <button class="btn-primary" onclick="applyView()">Apply</button>
+                        <button class="btn-secondary" onclick="resetView(null)" style="justify-content:center;">Reset</button>
                     </div>
                 </div>
             </div>
@@ -642,7 +717,7 @@
         dob: '2006-06-07',
         targetAge: 90,
         items: [
-            { id: 1, type: 'phase', name: 'School Years', start: 6, end: 18, color: '#7c5cfc' },
+            { id: 1, type: 'phase', name: 'School Years', start: 6, end: 18, color: '#7c5cfc', priority: 2 },
             { id: 2, type: 'event', name: 'Birth', age: 0, week: 1, color: '#ffffff' }
         ]
     };
@@ -653,6 +728,9 @@
     let hiddenIds = new Set();
     let editId = null;
     let currentMode = 'phase';
+    let currentPriority = 2;
+    let viewRange = { active: false, startAge: 0, endAge: 89 };
+    let viewMode = 'age';
 
     function init() {
         document.getElementById('dobInput').value = appData.dob;
@@ -748,15 +826,28 @@
         const totalCount = appData.targetAge * 52;
         let livedCount = 0;
 
+        // Compute full livedCount across all ages (not affected by view range)
+        for (let y = 0; y < appData.targetAge; y++) {
+            const ageYearStart = new Date(dobDate.getFullYear() + y, dobDate.getMonth(), dobDate.getDate());
+            for (let w = 1; w <= 52; w++) {
+                const weekStart = new Date(ageYearStart.getTime() + (w - 1) * 7 * 24 * 60 * 60 * 1000);
+                if (weekStart <= today) livedCount++;
+            }
+        }
+
+        // Determine which age rows to render
+        const renderStart = viewRange.active ? Math.max(0, viewRange.startAge) : 0;
+        const renderEnd   = viewRange.active ? Math.min(appData.targetAge - 1, viewRange.endAge) : appData.targetAge - 1;
+
         grid.appendChild(createDiv('axis-label', ''));
         for (let w = 1; w <= 52; w++)
             grid.appendChild(createDiv('axis-label', w % 5 === 0 || w === 1 ? w : ''));
         grid.appendChild(createDiv('axis-label', ''));
 
-        for (let y = 0; y < appData.targetAge; y++) {
+        for (let y = renderStart; y <= renderEnd; y++) {
             const yl = document.createElement('div');
             yl.className = 'axis-label y-label';
-            if (y % 5 === 0) {
+            if (y % 5 === 0 || y === renderStart) {
                 yl.innerHTML = `<div class="y-label-inner"><span class="y-year">${birthYear + y}</span><span class="y-dash"></span></div>`;
             }
             grid.appendChild(yl);
@@ -775,7 +866,6 @@
 
                 if (isLived) {
                     box.classList.add('lived');
-                    livedCount++;
                 }
                 if (isCurrent) box.classList.add('current');
 
@@ -788,7 +878,8 @@
                     <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px;">📅 ${dateRange}</div>
                 `;
 
-                const activePhase = appData.items.find(i => {
+                // Collect ALL active phases for this week, sort by priority (ascending = highest first)
+                const activePhases = appData.items.filter(i => {
                     if (i.type !== 'phase' || hiddenIds.has(i.id)) return false;
                     if (!(filterMode === 'all' || filterMode === 'phases')) return false;
                     if (i.startDate && i.endDate) {
@@ -797,27 +888,64 @@
                         return weekStart <= ed && weekEnd >= sd;
                     }
                     return y >= i.start && y <= i.end;
-                });
+                }).sort((a, b) => (a.priority || 2) - (b.priority || 2)).slice(0, 4);
 
-                if (activePhase) {
-                    bgColor = activePhase.color;
-                    tooltipContent += `<div style="color:${bgColor}; font-weight:500;">✦ ${activePhase.name}</div>`;
+                if (activePhases.length > 0) {
+                    if (activePhases.length === 1) {
+                        bgColor = activePhases[0].color;
+                        box.style.backgroundColor = bgColor;
+                    } else {
+                        // Build equal horizontal strips via linear-gradient
+                        const pct = 100 / activePhases.length;
+                        const stops = [];
+                        activePhases.forEach((phase, idx) => {
+                            const start = idx * pct;
+                            const end = (idx + 1) * pct;
+                            stops.push(`${phase.color} ${start.toFixed(2)}%`);
+                            stops.push(`${phase.color} ${end.toFixed(2)}%`);
+                        });
+                        box.style.background = `linear-gradient(to bottom, ${stops.join(', ')})`;
+                        bgColor = activePhases[0].color; // for border/glow reference
+                    }
+                    activePhases.forEach(phase => {
+                        const pLabel = phase.priority ? `<span style="font-size:0.65rem;opacity:0.7;">[P${phase.priority}]</span> ` : '';
+                        tooltipContent += `<div style="color:${phase.color}; font-weight:500;">✦ ${pLabel}${phase.name}</div>`;
+                    });
                 }
 
-                const activeEvent = appData.items.find(i =>
+                const weekEvents = appData.items.filter(i =>
                     i.type === 'event' && i.age == y && i.week == w && !hiddenIds.has(i.id)
                     && (filterMode === 'all' || filterMode === 'events'));
-                if (activeEvent) {
-                    bgColor = activeEvent.color;
-                    box.style.borderColor = activeEvent.color;
-                    box.style.boxShadow = `0 0 6px ${activeEvent.color}66`;
-                    tooltipContent += `<div style="margin-top:2px; color:${activeEvent.color}; font-weight:600;">📍 ${activeEvent.name}</div>`;
-                    if (activeEvent.date) {
-                        tooltipContent += `<div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">🗓 ${new Date(activeEvent.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>`;
+
+                if (weekEvents.length > 0) {
+                    if (activePhases.length > 0) {
+                        // Events within a life phase → render as colored dots inside the box
+                        const dotsContainer = document.createElement('div');
+                        dotsContainer.className = 'event-dots';
+                        weekEvents.slice(0, 3).forEach(ev => {
+                            const dot = document.createElement('div');
+                            dot.className = 'event-dot';
+                            dot.style.backgroundColor = ev.color;
+                            dotsContainer.appendChild(dot);
+                        });
+                        box.appendChild(dotsContainer);
+                        weekEvents.forEach(ev => {
+                            tooltipContent += `<div style="margin-top:2px; color:${ev.color}; font-weight:600;">📍 ${ev.name}</div>`;
+                            if (ev.date) tooltipContent += `<div style="font-size:0.72rem; color:var(--text-muted); margin-top:1px;">🗓 ${new Date(ev.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>`;
+                        });
+                    } else {
+                        // Events outside any phase → original behavior (override box color)
+                        const ev = weekEvents[0];
+                        box.style.background = '';
+                        box.style.backgroundColor = ev.color;
+                        box.style.borderColor = ev.color;
+                        box.style.boxShadow = `0 0 6px ${ev.color}66`;
+                        weekEvents.forEach(ev => {
+                            tooltipContent += `<div style="margin-top:2px; color:${ev.color}; font-weight:600;">📍 ${ev.name}</div>`;
+                            if (ev.date) tooltipContent += `<div style="font-size:0.72rem; color:var(--text-muted); margin-top:1px;">🗓 ${new Date(ev.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>`;
+                        });
                     }
                 }
-
-                if (bgColor) box.style.backgroundColor = bgColor;
                 box.onmouseenter = (e) => showTooltip(e, tooltipContent);
                 box.onmouseleave = hideTooltip;
                 grid.appendChild(box);
@@ -1162,7 +1290,7 @@
                         <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
                     <div class="event-text">
-                        <span class="event-label">${item.name}</span>
+                        <span class="event-label">${item.type === 'phase' && item.priority ? `<span class="priority-badge" style="--badge-color:${item.color}">P${item.priority}</span>` : ''}${item.name}</span>
                         <span class="event-time-label">${timeLabel}</span>
                     </div>
                 </label>
@@ -1256,6 +1384,7 @@
         document.getElementById('modeSelect').value = 'event';
         document.getElementById('field-ages').style.display = 'none';
         document.getElementById('field-date').style.display = 'flex';
+        document.getElementById('field-priority').style.display = 'none';
         document.getElementById('row-label') && (document.getElementById('row-label').innerText = 'Date');
     }
 
@@ -1264,6 +1393,96 @@
         document.getElementById('modeSelect').value = 'phase';
         document.getElementById('field-ages').style.display = 'flex';
         document.getElementById('field-date').style.display = 'none';
+        document.getElementById('field-priority').style.display = 'flex';
+    }
+
+    // ── VIEWS ──────────────────────────────────────────
+    function setViewMode(mode) {
+        viewMode = mode;
+        document.getElementById('view-mode-age').classList.toggle('active', mode === 'age');
+        document.getElementById('view-mode-year').classList.toggle('active', mode === 'year');
+        const dob = new Date(appData.dob + 'T12:00:00');
+        const birthYear = dob.getFullYear();
+        if (mode === 'age') {
+            document.getElementById('view-from-label').textContent = 'From (age)';
+            document.getElementById('view-to-label').textContent = 'To (age)';
+            document.getElementById('view-from').placeholder = '0';
+            document.getElementById('view-to').placeholder = String(appData.targetAge - 1);
+            // Convert displayed values if currently showing years
+            const f = document.getElementById('view-from').value;
+            const t = document.getElementById('view-to').value;
+            if (f) document.getElementById('view-from').value = Math.max(0, parseInt(f) - birthYear);
+            if (t) document.getElementById('view-to').value = Math.max(0, parseInt(t) - birthYear);
+        } else {
+            document.getElementById('view-from-label').textContent = 'From (year)';
+            document.getElementById('view-to-label').textContent = 'To (year)';
+            document.getElementById('view-from').placeholder = String(birthYear);
+            document.getElementById('view-to').placeholder = String(birthYear + appData.targetAge - 1);
+            // Convert displayed values if currently showing ages
+            const f = document.getElementById('view-from').value;
+            const t = document.getElementById('view-to').value;
+            if (f) document.getElementById('view-from').value = birthYear + parseInt(f);
+            if (t) document.getElementById('view-to').value = birthYear + parseInt(t);
+        }
+    }
+
+    function applyView() {
+        const fromRaw = document.getElementById('view-from').value;
+        const toRaw   = document.getElementById('view-to').value;
+        const dob = new Date(appData.dob + 'T12:00:00');
+        const birthYear = dob.getFullYear();
+
+        const from = fromRaw === '' ? (viewMode === 'age' ? 0 : birthYear) : parseInt(fromRaw);
+        const to   = toRaw   === '' ? (viewMode === 'age' ? appData.targetAge - 1 : birthYear + appData.targetAge - 1) : parseInt(toRaw);
+
+        if (isNaN(from) || isNaN(to) || from > to) return;
+
+        let startAge, endAge;
+        if (viewMode === 'age') {
+            startAge = Math.max(0, from);
+            endAge   = Math.min(appData.targetAge - 1, to);
+        } else {
+            startAge = Math.max(0, from - birthYear);
+            endAge   = Math.min(appData.targetAge - 1, to - birthYear);
+        }
+
+        if (startAge > endAge) return;
+        viewRange = { active: true, startAge, endAge };
+        updateViewUI();
+        render();
+    }
+
+    function resetView(e) {
+        if (e) e.stopPropagation();
+        viewRange = { active: false, startAge: 0, endAge: appData.targetAge - 1 };
+        document.getElementById('view-from').value = '';
+        document.getElementById('view-to').value   = '';
+        updateViewUI();
+        render();
+    }
+
+    function updateViewUI() {
+        const chip = document.getElementById('view-active-chip');
+        const resetBtn = document.getElementById('btn-reset-view');
+        if (viewRange.active) {
+            const dob = new Date(appData.dob + 'T12:00:00');
+            const by = dob.getFullYear();
+            const label = `Age ${viewRange.startAge}–${viewRange.endAge}  ·  ${by + viewRange.startAge}–${by + viewRange.endAge}`;
+            chip.textContent = label;
+            chip.style.display = 'inline';
+            resetBtn.style.display = 'flex';
+        } else {
+            chip.style.display = 'none';
+            resetBtn.style.display = 'none';
+        }
+    }
+    // ───────────────────────────────────────────────────
+
+    function setPriority(p) {
+        currentPriority = p;
+        document.querySelectorAll('.priority-btn').forEach(btn => {
+            btn.classList.toggle('active', parseInt(btn.getAttribute('data-p')) === p);
+        });
     }
 
     function cancelEdit() {
@@ -1276,6 +1495,7 @@
         document.getElementById('btnCancelEdit').style.display = 'none';
         document.getElementById('form-acc-title').innerText = "Add New Event";
         document.getElementById('btnSubmitPhase').innerText = "Save Data";
+        setPriority(2); // reset to default priority
     }
 
     function getAgeWeekFromDate(dateStr) {
@@ -1316,7 +1536,7 @@
             const endAge = getAgeWeekFromDate(endDateStr).age;
             newItem = { id: editId || Date.now(), type: 'phase', name, color,
                         startDate: startDateStr, endDate: endDateStr,
-                        start: startAge, end: endAge };
+                        start: startAge, end: endAge, priority: currentPriority };
         } else {
             const dateStr = document.getElementById('eventDate').value;
             if (!dateStr) return;
@@ -1345,6 +1565,7 @@
             addPhaseMode();
             document.getElementById('phaseStartDate').value = item.startDate || getDateFromAge(item.start);
             document.getElementById('phaseEndDate').value   = item.endDate   || getDateFromAge(item.end);
+            setPriority(item.priority || 2);
         } else {
             addEventMode();
             const dateStr = item.date || getDateFromAgeWeek(item.age, item.week);
