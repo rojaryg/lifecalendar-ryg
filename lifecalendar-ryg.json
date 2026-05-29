@@ -26,21 +26,23 @@
       "id": 1780027895843,
       "type": "phase",
       "name": "Kerja as Data Analyst",
-      "color": "#a4fb93",
-      "startDate": "2028-08-21",
+      "color": "#d10000",
+      "startDate": "2027-12-01",
       "endDate": "2056-01-01",
-      "start": 22,
-      "end": 49
+      "start": 21,
+      "end": 49,
+      "priority": 2
     },
     {
       "id": 1780028073705,
       "type": "phase",
       "name": "SMA",
-      "color": "#3de8ff",
+      "color": "#00612f",
       "startDate": "2023-07-24",
       "endDate": "2025-08-25",
       "start": 17,
-      "end": 19
+      "end": 19,
+      "priority": 2
     },
     {
       "id": 1780028308961,
@@ -50,7 +52,8 @@
       "startDate": "2019-07-22",
       "endDate": "2023-07-18",
       "start": 13,
-      "end": 17
+      "end": 17,
+      "priority": 3
     }
   ],
   "theme": "dark",
